@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,20 +8,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-slate-50">
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                <div
+                    class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
                     <span class="text-white font-bold">SP</span>
                 </div>
                 <span class="text-lg font-bold text-slate-900">SmartPay</span>
             </div>
             <div class="flex items-center gap-6">
+                <a href="dashboard.html" class="text-slate-600 hover:text-slate-900 transition">Beranda</a>
                 <a href="products.html" class="text-slate-600 hover:text-slate-900 transition">Top-Up</a>
                 <a href="history.html" class="text-slate-600 hover:text-slate-900 transition">Riwayat</a>
                 <button onclick="logout()" class="text-slate-600 hover:text-slate-900 transition">Logout</button>
@@ -49,11 +56,6 @@
                 <h3 class="text-3xl font-bold text-slate-900 mt-2">Rp 950.000</h3>
                 <p class="text-slate-500 text-xs mt-2">Bulan ini</p>
             </div>
-            <div class="bg-white rounded-xl p-6 shadow-sm">
-                <p class="text-slate-600 text-sm font-medium">Saldo Poin</p>
-                <h3 class="text-3xl font-bold text-slate-900 mt-2">5,200</h3>
-                <p class="text-slate-500 text-xs mt-2">Bonus untuk Anda</p>
-            </div>
         </div>
 
         <!-- Quick Actions -->
@@ -78,4 +80,5 @@
         }
     </script>
 </body>
+
 </html>
