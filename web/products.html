@@ -71,6 +71,17 @@
                     </div>
                 </div>
 
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Metode Pembayaran</label>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="paymentMethod" value="BRIVA" checked>
+                            <span>BRI Virtual Account (Fee 4.250)</span>
+                        </label>
+
+                    </div>
+                </div>
+
                 <input type="hidden" id="amount">
                 <input type="hidden" id="productCode">
 
@@ -78,6 +89,7 @@
                     class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Proses
                     Top-Up</button>
             </form>
+
         </div>
     </div>
 
@@ -150,13 +162,15 @@
             const email = localStorage.getItem("email");
             const productCode = document.getElementById("productCode").value;
 
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
             if (!amount) {
                 alert("Pilih nominal terlebih dahulu!");
                 return;
             }
 
             const result = await eel.create_transaction(
-                email, productCode, account, amount
+                email, productCode, account, amount, paymentMethod
             )();
 
             if (result.success) {

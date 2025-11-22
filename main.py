@@ -52,12 +52,12 @@ def login_user(email, password):
 
 # Fungsi untuk menyimpan informasi transaksi
 @eel.expose
-def create_transaction(email, product, account_number, amount):
+def create_transaction(email, product, account_number, amount, payment_method):
     try:
         conn = get_connection()
         cursor = conn.cursor()
 
-        admin_fee = 1500
+        admin_fee = 4250 # Biaya admin tetap
         total = amount + admin_fee
 
         # SIMPAN TRANSAKSI
@@ -73,12 +73,12 @@ def create_transaction(email, product, account_number, amount):
 
         # REQUEST KE TRIPAY
         tripay = request_tripay_payment(
-            method="BRIVA",
+            method=payment_method,
             merchant_ref=merchant_ref,
             amount=total,
             customer_name=email,
             customer_email=email,
-            customer_phone="08234567890",
+            customer_phone=account_number,
             product_sku=product,
             product_name=product
         )
