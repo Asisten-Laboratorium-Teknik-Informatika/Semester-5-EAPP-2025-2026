@@ -158,13 +158,13 @@ def get_dashboard_stats(email):
         total_trx = cursor.fetchone()["total_transactions"]
 
         # Total pengeluaran 
-        sql_sum = "SELECT IFNULL(SUM(total), 0) AS total_spent FROM transactions WHERE user_email = %s AND status='success'"
+        sql_sum = "SELECT IFNULL(SUM(amount), 0) AS total_spent FROM transactions WHERE user_email = %s AND status = 'success'"
         cursor.execute(sql_sum, (email,))
         total_spent = cursor.fetchone()["total_spent"]
 
         return {
             "total_transactions": total_trx,
-            "total_spent": total_spent
+            "total_spent": int(total_spent)
         }
 
     except Exception as e:

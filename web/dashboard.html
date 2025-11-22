@@ -95,7 +95,7 @@
             document.getElementById("userName").innerText = fullname;
 
             const stats = await eel.get_dashboard_stats(email)();
-
+            console.log(stats);
             document.getElementById("totalTransactions").innerText = stats.total_transactions;
             document.getElementById("totalSpent").innerText = "Rp " + stats.total_spent.toLocaleString('id-ID');
         };
