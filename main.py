@@ -1,6 +1,7 @@
 import eel
 import hashlib
 from db import get_connection
+from tripay_request import request_tripay_payment
 
 eel.init('web')
 
@@ -59,6 +60,7 @@ def create_transaction(email, product, account_number, amount):
         admin_fee = 1500
         total = amount + admin_fee
 
+        # SIMPAN TRANSAKSI
         sql = """
             INSERT INTO transactions (user_email, product, account_number, amount, admin_fee, total)
             VALUES (%s, %s, %s, %s, %s, %s)
@@ -66,12 +68,41 @@ def create_transaction(email, product, account_number, amount):
         cursor.execute(sql, (email, product, account_number, amount, admin_fee, total))
         conn.commit()
 
-        return cursor.lastrowid  
+        transaction_id = cursor.lastrowid
+        merchant_ref = f"INV{transaction_id}"
+
+        # REQUEST KE TRIPAY
+        tripay = request_tripay_payment(
+            method="BRIVA",
+            merchant_ref=merchant_ref,
+            amount=total,
+            customer_name=email,
+            customer_email=email,
+            customer_phone="08234567890",
+            product_sku=product,
+            product_name=product
+        )
+
+        if not tripay.get("success"):
+            return {"success": False, "message": tripay.get("message", "Tripay error")}
+
+        reference = tripay["data"]["reference"]
+
+        # UPDATE REFERENCE DI TABLE
+        update_sql = "UPDATE transactions SET reference=%s WHERE id=%s"
+        cursor.execute(update_sql, (reference, transaction_id))
+        conn.commit()
+
+        return {
+            "success": True,
+            "transaction_id": transaction_id,
+            "reference": reference,
+        }
 
     except Exception as e:
         print(e)
-        return "error"
-
+        return {"success": False, "message": str(e)}
+    
 
 # Fungsi untuk menampilkan invoice transaksi user menggunakan transaksi ID
 @eel.expose

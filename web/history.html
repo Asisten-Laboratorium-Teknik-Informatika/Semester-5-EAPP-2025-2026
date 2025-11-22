@@ -26,8 +26,7 @@
                     class="text-slate-600 hover:text-slate-900 transition">Beranda</a>
                 <a href="#" onclick="navigate('products.html')"
                     class="text-slate-600 hover:text-slate-900 transition">Top-Up</a>
-                <a href="#" onclick="navigate('history.html')"
-                    class="text-slate-600 hover:text-slate-900 transition">Riwayat</a>
+                <a href="#" onclick="navigate('history.html')" class="text-slate-600  font-semibold">Riwayat</a>
                 <button onclick="logout()" class="text-slate-600 hover:text-slate-900 transition">Logout</button>
             </div>
         </div>
@@ -72,6 +71,10 @@
             navigate('index.html');
         }
 
+        function viewInvoice(transactionId) {
+            window.location.href = `invoice.html?id=${transactionId}`;
+        }
+
         async function loadTransactions(filter = '') {
             const email = localStorage.getItem("email");
 
@@ -87,14 +90,14 @@
             const table = document.getElementById('transactionTable');
 
             table.innerHTML = filtered.map(t => `
-            <tr class="border-b">
-                <td class="px-6 py-4">${t.product}</td>
-                <td class="px-6 py-4">${t.account_number}</td>
-                <td class="px-6 py-4">Rp ${t.amount.toLocaleString('id-ID')}</td>
-                <td class="px-6 py-4">${t.created_at}</td>
-                <td class="px-6 py-4">${t.status}</td>
-            </tr>
-        `).join('');
+                <tr class="border-b cursor-pointer hover:bg-slate-50" onclick="viewInvoice(${t.id})">
+                    <td class="px-6 py-4">${t.product}</td>
+                    <td class="px-6 py-4">${t.account_number}</td>
+                    <td class="px-6 py-4">Rp ${t.amount.toLocaleString('id-ID')}</td>
+                    <td class="px-6 py-4">${t.created_at}</td>
+                    <td class="px-6 py-4">${t.status}</td>
+                </tr>
+            `).join('');
         }
 
         document.getElementById('filterStatus').addEventListener('change', (e) => {

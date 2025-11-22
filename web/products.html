@@ -21,7 +21,8 @@
             </div>
 
             <div class="flex items-center gap-6">
-                <a onclick="navigate('dashboard.html')" class="text-slate-600 hover:text-slate-900 transition">Beranda</a>
+                <a onclick="navigate('dashboard.html')"
+                    class="text-slate-600 hover:text-slate-900 transition">Beranda</a>
                 <a onclick="navigate('products.html')" class="text-slate-900 font-semibold">Top-Up</a>
                 <a onclick="navigate('history.html')" class="text-slate-600 hover:text-slate-900 transition">Riwayat</a>
                 <button onclick="logout()" class="text-slate-600 hover:text-slate-900 transition">Logout</button>
@@ -74,7 +75,8 @@
                 <input type="hidden" id="productCode">
 
                 <button type="submit"
-                    class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Proses Top-Up</button>
+                    class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Proses
+                    Top-Up</button>
             </form>
         </div>
     </div>
@@ -82,7 +84,9 @@
     <script type="text/javascript" src="/eel.js"></script>
 
     <script>
-        function navigate(page) { window.location.href = page; }
+        function navigate(page) {
+            window.location.href = page;
+        }
 
         function logout() {
             localStorage.clear();
@@ -91,10 +95,21 @@
 
         let selectedProduct = null;
 
-        const products = [
-            { id: 1, name: 'DANA', icon: 'icon/Dana.jpg' },
-            { id: 2, name: 'GoPay', icon: 'icon/Gopay.png' },
-            { id: 3, name: 'LinkAja', icon: 'icon/Linkaja.png' }
+        const products = [{
+                id: 1,
+                name: 'DANA',
+                icon: 'icon/Dana.jpg'
+            },
+            {
+                id: 2,
+                name: 'GoPay',
+                icon: 'icon/Gopay.png'
+            },
+            {
+                id: 3,
+                name: 'LinkAja',
+                icon: 'icon/Linkaja.png'
+            }
         ];
 
         function renderProducts() {
@@ -124,10 +139,10 @@
             document.getElementById('amount').value = amount;
 
             let code = selectedProduct.name.toUpperCase().replace("PAY", "") + amount / 1000;
-            document.getElementById('productCode').value = code;  
+            document.getElementById('productCode').value = code;
         }
 
-        document.getElementById('topupForm').addEventListener('submit', async function (e) {
+        document.getElementById('topupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const amount = parseInt(document.getElementById('amount').value);
@@ -140,22 +155,21 @@
                 return;
             }
 
-            const trxId = await eel.create_transaction(
-                email,
-                productCode,
-                account,
-                amount
-             )();
+            const result = await eel.create_transaction(
+                email, productCode, account, amount
+            )();
 
-            if (trxId !== "error") {
-                window.location.href = `invoice.html?id=${trxId}`;
+            if (result.success) {
+                window.location.href = `invoice.html?id=${result.transaction_id}`;
             } else {
-                alert("Gagal membuat transaksi!");
+                alert("Gagal membuat transaksi: " + result.message);
             }
+
         });
 
         renderProducts();
     </script>
 
 </body>
+
 </html>
