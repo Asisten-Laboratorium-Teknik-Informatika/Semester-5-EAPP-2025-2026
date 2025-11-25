@@ -110,6 +110,10 @@
                 <p class="text-sm text-slate-600">Biaya Admin</p>
                 <p id="adminFee" class="font-semibold">-</p>
             </div>
+            <div class="border-b border-slate-200 pb-6 mb-6">
+                <p class="text-sm text-slate-600">Kode Bayar</p>
+                <p id="paycode" class="text-xl font-bold">-</p>
+            </div>
 
             <div class="flex justify-between items-center">
                 <p class="text-lg font-bold">Total Pembayaran</p>
@@ -142,6 +146,7 @@
 
     <script type="text/javascript" src="/eel.js"></script>
     <script>
+ 
         async function loadInvoice() {
             const params = new URLSearchParams(window.location.search);
             const trxId = params.get("id");
@@ -157,6 +162,7 @@
                 document.getElementById("amount").innerText = "Rp " + trx.amount.toLocaleString('id-ID');
                 document.getElementById("adminFee").innerText = "Rp " + trx.admin_fee.toLocaleString('id-ID');
                 document.getElementById("total").innerText = "Rp " + trx.total.toLocaleString('id-ID');
+                document.getElementById("paycode").innerText = trx.pay_code || "-";
 
                 const statusBox = document.getElementById("statusBox");
                 const statusIcon = document.getElementById("statusIcon");

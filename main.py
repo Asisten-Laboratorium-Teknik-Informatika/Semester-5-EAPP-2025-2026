@@ -87,10 +87,11 @@ def create_transaction(email, product, account_number, amount, payment_method):
             return {"success": False, "message": tripay.get("message", "Tripay error")}
 
         reference = tripay["data"]["reference"]
+        pay_code = tripay["data"]["pay_code"]
 
         # UPDATE REFERENCE DI TABLE
-        update_sql = "UPDATE transactions SET reference=%s WHERE id=%s"
-        cursor.execute(update_sql, (reference, transaction_id))
+        update_sql = "UPDATE transactions SET reference=%s, pay_code=%s WHERE id=%s"
+        cursor.execute(update_sql, (reference, pay_code, transaction_id))
         conn.commit()
 
         return {
