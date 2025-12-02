@@ -1,0 +1,36 @@
+{
+    "project": {
+        "id": 20,
+        "name": "Pemrograman Web",
+        "description": "Membuat website Antrakios",
+        "created_at": "2025-11-24 17:38:37",
+        "month": 11,
+        "year": 2025,
+        "status": "completed",
+        "start_date": null,
+        "end_date": null,
+        "is_archived": 1
+    },
+    "tasks": [
+        {
+            "id": 26,
+            "project_id": 20,
+            "title": "membuat flowchart",
+            "description": "membuat flowchart dari website yang ingin dibuat",
+            "status": "done",
+            "deadline": "2025-11-25 00:00:00",
+            "start_time": null,
+            "end_time": null
+        },
+        {
+            "id": 27,
+            "project_id": 20,
+            "title": "desain UI/UX",
+            "description": "membuat desain ui/ux daei figma",
+            "status": "done",
+            "deadline": "2025-11-27 00:00:00",
+            "start_time": null,
+            "end_time": null
+        }
+    ]
+}
