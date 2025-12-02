@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top-Up E-Wallet - SmartPay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold">SP</span>
+                </div>
+                <span class="text-lg font-bold">SmartPay</span>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <a onclick="navigate('dashboard.html')"
+                    class="text-slate-600 hover:text-slate-900 transition">Beranda</a>
+                <a onclick="navigate('products.html')" class="text-slate-900 font-semibold">Top-Up</a>
+                <a onclick="navigate('history.html')" class="text-slate-600 hover:text-slate-900 transition">Riwayat</a>
+                <button onclick="logout()" class="text-slate-600 hover:text-slate-900 transition">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <h1 class="text-3xl font-bold mb-8">Pilih E-Wallet</h1>
+        <div class="grid grid-cols-4 gap-6" id="productsGrid"></div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-md">
+            <div class="flex items-center justify-between mb-6">
+                <h2 id="modalTitle" class="text-2xl font-bold"></h2>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+            </div>
+
+            <form id="topupForm">
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nomor Akun</label>
+                    <input type="text" id="accountNumber" required
+                        class="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-500 outline-none transition"
+                        placeholder="08123456789">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nominal</label>
+
+                    <div class="grid grid-cols-3 gap-2 mb-3">
+                        <button type="button" onclick="setAmount(50000)"
+                            class="py-2 px-3 border-2 border-slate-200 rounded-lg hover:border-blue-500 transition font-medium">
+                            Rp 50K
+                        </button>
+                        <button type="button" onclick="setAmount(100000)"
+                            class="py-2 px-3 border-2 border-slate-200 rounded-lg hover:border-blue-500 transition font-medium">
+                            Rp 100K
+                        </button>
+                        <button type="button" onclick="setAmount(200000)"
+                            class="py-2 px-3 border-2 border-slate-200 rounded-lg hover:border-blue-500 transition font-medium">
+                            Rp 200K
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Metode Pembayaran</label>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="paymentMethod" value="BRIVA" checked>
+                            <span>BRI Virtual Account (Fee 4.250)</span>
+                        </label>
+
+                    </div>
+                </div>
+
+                <input type="hidden" id="amount">
+                <input type="hidden" id="productCode">
+
+                <button type="submit"
+                    class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Proses
+                    Top-Up</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+
+    <script>
+        function navigate(page) {
+            window.location.href = page;
+        }
+
+        function logout() {
+            localStorage.clear();
+            navigate('index.html');
+        }
+
+        let selectedProduct = null;
+
+        const products = [{
+                id: 1,
+                name: 'DANA',
+                icon: 'icon/Dana.jpg'
+            },
+            {
+                id: 2,
+                name: 'GoPay',
+                icon: 'icon/Gopay.png'
+            },
+            {
+                id: 3,
+                name: 'LinkAja',
+                icon: 'icon/Linkaja.png'
+            }
+        ];
+
+        function renderProducts() {
+            document.getElementById("productsGrid").innerHTML = products
+                .map(p => `
+                    <div onclick="openModal(${p.id})"
+                        class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg transition">
+                        <img src="${p.icon}" class="w-auto h-14 mb-4">
+                        <h3 class="font-semibold text-lg">${p.name}</h3>
+                    </div>
+                `).join('');
+        }
+
+        function openModal(id) {
+            selectedProduct = products.find(p => p.id === id);
+            document.getElementById('modalTitle').textContent = selectedProduct.name;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('accountNumber').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('topupForm').reset();
+        }
+
+        function setAmount(amount) {
+            document.getElementById('amount').value = amount;
+
+            let code = selectedProduct.name.toUpperCase().replace("PAY", "") + amount / 1000;
+            document.getElementById('productCode').value = code;
+        }
+
+        document.getElementById('topupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const amount = parseInt(document.getElementById('amount').value);
+            const account = document.getElementById('accountNumber').value;
+            const email = localStorage.getItem("email");
+            const productCode = document.getElementById("productCode").value;
+
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            if (!amount) {
+                alert("Pilih nominal terlebih dahulu!");
+                return;
+            }
+
+            const result = await eel.create_transaction(
+                email, productCode, account, amount, paymentMethod
+            )();
+
+            if (result.success) {
+                window.location.href = `invoice.html?id=${result.transaction_id}`;
+            } else {
+                alert("Gagal membuat transaksi: " + result.message);
+            }
+
+        });
+
+        renderProducts();
+    </script>
+
+</body>
+
+</html>

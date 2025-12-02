@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SmartPay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 to-slate-100">
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="w-full max-w-md">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-slate-900">SmartPay</h1>
+                <p class="text-slate-600 text-sm mt-1">Masuk ke akun Anda</p>
+            </div>
+
+            <!-- Login Form -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <form id="loginForm">
+                    <div class="mb-5">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+                        <input type="email" required
+                            class="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-500 outline-none transition"
+                            placeholder="email@email.com">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+                        <input type="password" required
+                            class="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-500 outline-none transition"
+                            placeholder="••••••••">
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Masuk</button>
+                </form>
+
+                <div class="mt-6 pt-6 border-t border-slate-200">
+                    <p class="text-center text-slate-600 text-sm">Belum punya akun? <a href="register.html"
+                            class="text-blue-600 font-semibold hover:text-blue-700">Daftar di sini</a></p>
+                </div>
+            </div>
+
+            <p class="text-center text-slate-600 text-xs mt-6"><a href="index.html"
+                    class="text-blue-600 hover:text-blue-700">Kembali ke beranda</a></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            let email = document.querySelector("#loginForm input[type='email']").value;
+            let password = document.querySelector("#loginForm input[type='password']").value;
+
+            let result = await eel.login_user(email, password)();
+
+            if (result.status === "success") {
+                localStorage.setItem("fullname", result.fullname);
+                localStorage.setItem("email", result.email);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Berhasil!',
+                    text: 'Selamat datang, ' + result.fullname,
+                    heightAuto: false
+                }).then(() => {
+                    window.location.href = "dashboard.html";
+                });
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Gagal',
+                    text: 'Email atau password salah!',
+                    heightAuto: false
+                });
+            }
+        });
+
+        window.onload = function() {
+            let fullname = localStorage.getItem("fullname");
+            if (fullname) {
+                window.location.href = "dashboard.html";
+            }
+        };
+    </script>
+
+
+</body>
+
+</html>

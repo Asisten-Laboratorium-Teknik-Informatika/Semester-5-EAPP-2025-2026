@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartPay - Invoice & Status Pembayaran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .gradient-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+
+        .gradient-success {
+            background: #059669;
+        }
+
+        .gradient-failed {
+            background: #b91c1c;
+        }
+
+        .gradient-expired {
+            background: #f59e0b;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+        }
+
+        .success-check {
+            animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0) rotate(-45deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .float-up {
+            animation: floatUp 1s ease-in-out infinite;
+        }
+
+        @keyframes floatUp {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b border-slate-200">
+        <div class="max-w-2xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white font-bold">
+                    SP
+                </div>
+                <span class="text-lg font-bold text-slate-900">SmartPay</span>
+            </div>
+            <a href="products.html" class="text-slate-600 hover:text-slate-900 transition">← Kembali</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-2xl mx-auto px-6 py-8">
+
+        <!-- Invoice Card -->
+        <div class="bg-white rounded-2xl shadow p-8 mb-6">
+
+            <p class="text-sm text-slate-600 mb-1">ID Transaksi</p>
+            <p id="trxId" class="text-xl font-bold text-slate-900 mb-6">Loading...</p>
+
+            <div class="border-b border-slate-200 pb-6 mb-6">
+                <p class="text-sm text-slate-600">Produk</p>
+                <p id="product" class="text-lg font-semibold">-</p>
+
+                <p class="text-sm text-slate-600 mt-4">Nominal</p>
+                <p id="amount" class="text-lg font-semibold">-</p>
+            </div>
+
+            <div class="border-b border-slate-200 pb-6 mb-6">
+                <p class="text-sm text-slate-600">Nomor Tujuan</p>
+                <p id="account" class="font-semibold">-</p>
+            </div>
+
+            <div class="border-b border-slate-200 pb-6 mb-6">
+                <p class="text-sm text-slate-600">Biaya Admin</p>
+                <p id="adminFee" class="font-semibold">-</p>
+            </div>
+            <div class="border-b border-slate-200 pb-6 mb-6">
+                <p class="text-sm text-slate-600">Kode Bayar</p>
+                <p id="paycode" class="text-xl font-bold">-</p>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <p class="text-lg font-bold">Total Pembayaran</p>
+                <p id="total" class="text-2xl font-bold text-blue-600">-</p>
+            </div>
+        </div>
+
+        <!-- Status Alert -->
+        <div id="statusBox" class="hidden flex flex-col items-center p-6 rounded-2xl shadow-xl text-white mb-6">
+            <div id="statusIcon" class="w-20 h-20 rounded-full flex items-center justify-center float-up mb-4 text-6xl">
+            </div>
+            <h1 id="statusTitle" class="text-2xl font-bold mb-2"></h1>
+            <p id="statusMessage" class="text-white text-center"></p>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-4">
+            <a href="history.html"
+                class="flex-1 px-6 py-3 border-2 border-slate-300 text-slate-700 font-semibold rounded-xl hover:bg-slate-100 transition text-center">
+                Lihat Riwayat
+            </a>
+
+            <a href="products.html"
+                class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition text-center">
+                Transaksi Lagi
+            </a>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script>
+ 
+        async function loadInvoice() {
+            const params = new URLSearchParams(window.location.search);
+            const trxId = params.get("id");
+            if (!trxId) return;
+
+            async function refreshStatus() {
+                const trx = await eel.get_transaction(parseInt(trxId))();
+                if (!trx) return;
+
+                document.getElementById("trxId").innerText = "TRX" + trx.id;
+                document.getElementById("product").innerText = trx.product;
+                document.getElementById("account").innerText = trx.account_number;
+                document.getElementById("amount").innerText = "Rp " + trx.amount.toLocaleString('id-ID');
+                document.getElementById("adminFee").innerText = "Rp " + trx.admin_fee.toLocaleString('id-ID');
+                document.getElementById("total").innerText = "Rp " + trx.total.toLocaleString('id-ID');
+                document.getElementById("paycode").innerText = trx.pay_code || "-";
+
+                const statusBox = document.getElementById("statusBox");
+                const statusIcon = document.getElementById("statusIcon");
+                const statusTitle = document.getElementById("statusTitle");
+                const statusMessage = document.getElementById("statusMessage");
+
+                const status = trx.status.toLowerCase();
+                statusBox.classList.remove("hidden");
+
+                if (status === "success") {
+                    statusBox.className =
+                        "flex flex-col items-center p-6 rounded-2xl shadow-xl gradient-success mb-6";
+                    statusIcon.innerHTML = "✔";
+                    statusTitle.innerText = "Pembayaran Berhasil!";
+                    statusMessage.innerText = "Transaksi Anda telah diproses dengan sukses";
+                } else if (status === "failed") {
+                    statusBox.className =
+                        "flex flex-col items-center p-6 rounded-2xl shadow-xl gradient-failed mb-6";
+                    statusIcon.innerHTML = "✖";
+                    statusTitle.innerText = "Pembayaran Gagal!";
+                    statusMessage.innerText = "Silakan coba kembali atau gunakan metode pembayaran lain.";
+                } else if (status === "expired") {
+                    statusBox.className =
+                        "flex flex-col items-center p-6 rounded-2xl shadow-xl gradient-expired mb-6";
+                    statusIcon.innerHTML = "⚠";
+                    statusTitle.innerText = "Pembayaran Kedaluwarsa!";
+                    statusMessage.innerText = "Kode pembayaran sudah melewati batas waktu.";
+                } else {
+                    statusBox.className = "flex flex-col items-center p-6 rounded-2xl shadow-xl bg-gray-400 mb-6";
+                    statusIcon.innerHTML = "⌛";
+                    statusTitle.innerText = "Menunggu Pembayaran...";
+                    statusMessage.innerText = "Selesaikan pembayaran sesuai instruksi.";
+                }
+            }
+
+            await refreshStatus();
+
+            setInterval(refreshStatus, 2000);
+        }
+
+        window.onload = loadInvoice;
+    </script>
+
+
+</body>
+
+</html>
