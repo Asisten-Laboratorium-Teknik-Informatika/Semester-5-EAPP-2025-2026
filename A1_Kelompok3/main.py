@@ -2,6 +2,9 @@ import eel
 import hashlib
 from db import get_connection
 from tripay_request import request_tripay_payment
+import pymysql
+from pymysql.cursors import DictCursor    
+pymysql.install_as_MySQLdb()
 
 eel.init('web')
 
@@ -10,7 +13,7 @@ eel.init('web')
 def register_user(fullname, email, phone, password):
     try:
         conn = get_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor(DictCursor)
 
         hashed = hashlib.sha256(password.encode()).hexdigest()
 
@@ -29,7 +32,7 @@ def register_user(fullname, email, phone, password):
 def login_user(email, password):
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(DictCursor)
 
         hashed = hashlib.sha256(password.encode()).hexdigest()
         sql = "SELECT * FROM users WHERE email = %s AND password = %s"
@@ -110,7 +113,7 @@ def create_transaction(email, product, account_number, amount, payment_method):
 def get_transaction(transaction_id):
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(DictCursor)
 
         sql = "SELECT * FROM transactions WHERE id = %s"
         cursor.execute(sql, (transaction_id,))
@@ -127,7 +130,7 @@ def get_transaction(transaction_id):
 def get_transactions_by_user(email):
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(DictCursor)
 
         sql = "SELECT * FROM transactions WHERE user_email = %s ORDER BY created_at DESC"
         cursor.execute(sql, (email,))
@@ -151,7 +154,7 @@ def get_transactions_by_user(email):
 def get_dashboard_stats(email):
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(DictCursor)
 
         # Total transaksi
         sql_count = "SELECT COUNT(*) AS total_transactions FROM transactions WHERE user_email = %s"
