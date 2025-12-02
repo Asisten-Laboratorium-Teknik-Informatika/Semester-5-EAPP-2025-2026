@@ -1,37 +1,64 @@
 import eel
-import mysql.connector
-from mysql.connector import Error
+import pymysql
+from pymysql.cursors import DictCursor
 from datetime import datetime, date
 import hashlib
+import sys, os
 
-# Inisialisasi folder frontend (web)
-eel.init('web')
+# ====================================
+# PyMySQL Setup (EXE Friendly)
+# ====================================
+pymysql.install_as_MySQLdb()
+
+
+# ====================================
+# Resource Path for backend files (NOT for web folder)
+# ====================================
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+
+# ====================================
+# INIT FRONTEND (IMPORTANT!)
+# DO NOT USE resource_path HERE
+# ====================================
+eel.init("web")
+
 
 current_user = None
 
-# Fungsi koneksi ke database MySQL
+
+# ====================================
+# DATABASE CONNECTION USING PyMySQL
+# ====================================
 def create_connection():
     try:
-        connection = mysql.connector.connect(
-            host='localhost',          
-            user='root',               
-            password='',               
-            database='manajemen_kadaluarsa'
+        connection = pymysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="manajemen_kadaluarsa",
+            cursorclass=DictCursor
         )
-        if connection.is_connected():
-            print("✅ Koneksi ke database berhasil.")
-            return connection
-    except Error as e:
-        print(f"❌ Gagal konek ke database: {e}")
+        print("✅ Koneksi PyMySQL berhasil!")
+        return connection
+    except Exception as e:
+        print("❌ Gagal konek ke DB:", e)
         return None
-    
-    
-@eel.expose  # penting! agar bisa dipanggil dari JS
+
+
+# ====================================
+# USER SECTION
+# ====================================
+@eel.expose
 def register_user(name, email, password):
     connection = create_connection()
-    cursor = connection.cursor()
+    if connection is None:
+        return "db_error"
 
-    # Hash password biar aman
+    cursor = connection.cursor()
     hashed_pw = hashlib.sha256(password.encode()).hexdigest()
 
     query = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)"
@@ -40,193 +67,204 @@ def register_user(name, email, password):
 
     cursor.close()
     connection.close()
+
+    print("🟢 Registrasi berhasil:", email)
     return "success"
+
 
 @eel.expose
 def login_user(email, password):
-    global current_user  
-    connection = create_connection()
-    cursor = connection.cursor(dictionary=True)
+    global current_user
 
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    connection = create_connection()
+    if connection is None:
+        return "db_error"
+
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
     user = cursor.fetchone()
+
     cursor.close()
     connection.close()
 
-    if user:
-        hashed_pw = hashlib.sha256(password.encode()).hexdigest()
-        if hashed_pw == user['password']:
-            current_user = email 
-            print("✅ Login berhasil untuk:", email)
-            return "success"
-        else:
-            print("❌ Password salah untuk:", email)
-            return "wrong_password"
-    else:
+    if not user:
         print("❌ Email tidak ditemukan:", email)
         return "not_found"
-    
+
+    hashed_pw = hashlib.sha256(password.encode()).hexdigest()
+
+    if hashed_pw != user["password"]:
+        print("❌ Password salah untuk:", email)
+        return "wrong_password"
+
+    current_user = email
+    print("✅ Login berhasil:", email)
+    return "success"
+
+
 @eel.expose
 def update_profile(email, name):
-    try:
-        connection = create_connection()
-        cursor = connection.cursor()
-        
-        query = "UPDATE users SET name = %s WHERE email = %s"
-        cursor.execute(query, (name, email))
-        connection.commit()
+    connection = create_connection()
+    if connection is None:
+        return "db_error"
 
-        cursor.close()
-        connection.close()
-        print(f"✅ Profil diperbarui untuk {email}")
-        return "success"
-    except Exception as e:
-        print(f"❌ Gagal update profil: {e}")
-        return "error"
-    
+    cursor = connection.cursor()
+    cursor.execute("UPDATE users SET name=%s WHERE email=%s", (name, email))
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+    print("🟢 Profil diupdate:", email)
+    return "success"
+
+
+# ====================================
+# FOOD SECTION
+# ====================================
 @eel.expose
 def get_foods_by_user():
     global current_user
     if not current_user:
-        print("❌ Tidak ada user login.")
         return []
 
     connection = create_connection()
-    cursor = connection.cursor(dictionary=True)
+    if connection is None:
+        return []
 
-    query = "SELECT * FROM foods WHERE user_email = %s ORDER BY id DESC"
-    cursor.execute(query, (current_user,))
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT * FROM foods WHERE user_email=%s ORDER BY id DESC",
+        (current_user,)
+    )
     rows = cursor.fetchall()
+
     cursor.close()
     connection.close()
 
+    # Format waktu
     for row in rows:
-        if isinstance(row["tanggal_dibuat"], datetime):
+        if isinstance(row.get("tanggal_dibuat"), datetime):
             row["tanggal_dibuat"] = format_datetime(row["tanggal_dibuat"])
         if isinstance(row.get("tanggal_edit"), datetime):
             row["tanggal_edit"] = format_datetime(row["tanggal_edit"])
-        if isinstance(row["created_at"], datetime):
-            row["created_at"] = format_datetime(row["created_at"])
-        if isinstance(row["updated_at"], datetime):
-            row["updated_at"] = format_datetime(row["updated_at"])
-        if isinstance(row["tanggal_expired"], date):
+        if isinstance(row.get("tanggal_expired"), date):
             row["tanggal_expired"] = format_date(row["tanggal_expired"])
+        if isinstance(row.get("created_at"), datetime):
+            row["created_at"] = format_datetime(row["created_at"])
+        if isinstance(row.get("updated_at"), datetime):
+            row["updated_at"] = format_datetime(row["updated_at"])
 
-
-    print(f"🍽️ Mengambil data makanan milik: {current_user}")
+    print("📦 Data makanan user dikirim:", current_user)
     return rows
+
 
 @eel.expose
 def add_food(nama_makanan, jumlah, tanggal_expired):
     global current_user
     if not current_user:
-        print("❌ Tidak ada user login.")
         return "not_logged_in"
 
     connection = create_connection()
+    if connection is None:
+        return "db_error"
+
     cursor = connection.cursor()
 
     query = """
-    INSERT INTO foods (user_email, nama_makanan, jumlah, tanggal_dibuat, tanggal_expired, created_at, updated_at)
-    VALUES (%s, %s, %s, NOW(), %s, NOW(), NOW())
+        INSERT INTO foods (user_email, nama_makanan, jumlah, tanggal_dibuat, tanggal_expired, created_at, updated_at)
+        VALUES (%s, %s, %s, NOW(), %s, NOW(), NOW())
     """
+
     cursor.execute(query, (current_user, nama_makanan, jumlah, tanggal_expired))
     connection.commit()
 
     cursor.close()
     connection.close()
 
-    print(f"✅ Makanan '{nama_makanan}' berhasil ditambahkan oleh {current_user}")
+    print("🟢 Food added:", nama_makanan)
     return "success"
+
 
 @eel.expose
 def get_food_by_id(food_id):
     global current_user
     if not current_user:
-        print("❌ Tidak ada user login.")
         return None
 
     connection = create_connection()
-    cursor = connection.cursor(dictionary=True)
+    if connection is None:
+        return None
 
-    query = "SELECT * FROM foods WHERE id = %s AND user_email = %s"
-    cursor.execute(query, (food_id, current_user))
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT * FROM foods WHERE id=%s AND user_email=%s",
+        (food_id, current_user)
+    )
     food = cursor.fetchone()
 
     cursor.close()
     connection.close()
 
-    print(f"📌 Mengambil data makanan ID {food_id}")
     return food
+
 
 @eel.expose
 def update_food(food_id, nama_makanan, jumlah, tanggal_expired):
     global current_user
     if not current_user:
-        print("❌ User belum login.")
         return "not_logged_in"
 
-    try:
-        connection = create_connection()
-        cursor = connection.cursor()
+    connection = create_connection()
+    if connection is None:
+        return "db_error"
 
-        query = """
-        UPDATE foods 
-        SET nama_makanan = %s, jumlah = %s, tanggal_expired = %s, 
-            tanggal_edit = NOW(), updated_at = NOW()
-        WHERE id = %s AND user_email = %s
-        """
-        
-        cursor.execute(query, (nama_makanan, jumlah, tanggal_expired, food_id, current_user))
-        connection.commit()
+    cursor = connection.cursor()
 
-        cursor.close()
-        connection.close()
+    query = """
+        UPDATE foods
+        SET nama_makanan=%s, jumlah=%s, tanggal_expired=%s,
+            tanggal_edit=NOW(), updated_at=NOW()
+        WHERE id=%s AND user_email=%s
+    """
 
-        print(f"✏️ Makanan ID {food_id} berhasil diperbarui.")
-        return "success"
-    
-    except Exception as e:
-        print(f"❌ Error update: {e}")
-        return "error"
-    
+    cursor.execute(query, (nama_makanan, jumlah, tanggal_expired, food_id, current_user))
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
+    print("🟢 Food updated:", food_id)
+    return "success"
+
+
 @eel.expose
 def delete_food(food_id):
     global current_user
     if not current_user:
-        print("❌ User belum login.")
         return "not_logged_in"
 
-    try:
-        connection = create_connection()
-        cursor = connection.cursor()
+    connection = create_connection()
+    if connection is None:
+        return "db_error"
 
-        query = "DELETE FROM foods WHERE id = %s AND user_email = %s"
-        cursor.execute(query, (food_id, current_user))
-        connection.commit()
+    cursor = connection.cursor()
+    cursor.execute(
+        "DELETE FROM foods WHERE id=%s AND user_email=%s",
+        (food_id, current_user)
+    )
+    connection.commit()
 
-        cursor.close()
-        connection.close()
+    cursor.close()
+    connection.close()
 
-        print(f"🗑️ Makanan ID {food_id} berhasil dihapus.")
-        return "success"
+    print("🗑 Food deleted:", food_id)
+    return "success"
 
-    except Exception as e:
-        print(f"❌ Error menghapus makanan: {e}")
-        return "error"
 
-@eel.expose
-def format_datetime(dt):
-    if dt is None:
-        return None
-    return dt.strftime("%Y-%m-%dT%H:%M:%S")
-
-@eel.expose
-def format_date(d):
-    if d is None:
-        return None
-    return d.strftime("%Y-%m-%dT00:00:00")
-
+# ====================================
+# PASSWORD MANAGEMENT
+# ====================================
 @eel.expose
 def update_password(current_password, new_password):
     global current_user
@@ -234,35 +272,30 @@ def update_password(current_password, new_password):
         return "not_logged_in"
 
     connection = create_connection()
-    cursor = connection.cursor(dictionary=True)
+    if connection is None:
+        return "db_error"
 
-    # Ambil user
-    cursor.execute("SELECT password FROM users WHERE email = %s", (current_user,))
+    cursor = connection.cursor()
+    cursor.execute("SELECT password FROM users WHERE email=%s", (current_user,))
     user = cursor.fetchone()
 
     if not user:
-        cursor.close()
-        connection.close()
         return "user_not_found"
 
-    # Hash password lama untuk dicocokkan
     hashed_current = hashlib.sha256(current_password.encode()).hexdigest()
 
     if hashed_current != user["password"]:
-        cursor.close()
-        connection.close()
         return "wrong_password"
 
-    # Hash password baru
     hashed_new = hashlib.sha256(new_password.encode()).hexdigest()
-
-    cursor.execute("UPDATE users SET password = %s WHERE email = %s", (hashed_new, current_user))
+    cursor.execute("UPDATE users SET password=%s WHERE email=%s", (hashed_new, current_user))
     connection.commit()
 
     cursor.close()
     connection.close()
 
     return "success"
+
 
 @eel.expose
 def delete_account(password):
@@ -271,61 +304,54 @@ def delete_account(password):
         return "not_logged_in"
 
     connection = create_connection()
-    cursor = connection.cursor(dictionary=True)
+    if connection is None:
+        return "db_error"
 
-    # Ambil user
-    cursor.execute("SELECT password FROM users WHERE email = %s", (current_user,))
+    cursor = connection.cursor()
+    cursor.execute("SELECT password FROM users WHERE email=%s", (current_user,))
     user = cursor.fetchone()
 
     if not user:
-        cursor.close()
-        connection.close()
         return "user_not_found"
 
-    # Cek password
     hashed_pw = hashlib.sha256(password.encode()).hexdigest()
+
     if hashed_pw != user["password"]:
-        cursor.close()
-        connection.close()
         return "wrong_password"
 
-    # Hapus semua makanan milik user
-    cursor.execute("DELETE FROM foods WHERE user_email = %s", (current_user,))
+    cursor.execute("DELETE FROM foods WHERE user_email=%s", (current_user,))
+    cursor.execute("DELETE FROM users WHERE email=%s", (current_user,))
 
-    # Hapus akun user
-    cursor.execute("DELETE FROM users WHERE email = %s", (current_user,))
     connection.commit()
-
     cursor.close()
     connection.close()
 
     current_user = None
     return "success"
 
+
 @eel.expose
 def reset_password(email, new_password):
     connection = create_connection()
-    cursor = connection.cursor(dictionary=True)
+    if connection is None:
+        return "db_error"
 
-    # cek apakah email ada
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
     user = cursor.fetchone()
 
     if not user:
-        cursor.close()
-        connection.close()
         return "not_found"
 
-    # hash password baru
     hashed_pw = hashlib.sha256(new_password.encode()).hexdigest()
-
-    cursor.execute("UPDATE users SET password = %s WHERE email = %s", (hashed_pw, email))
+    cursor.execute("UPDATE users SET password=%s WHERE email=%s", (hashed_pw, email))
     connection.commit()
 
     cursor.close()
     connection.close()
 
     return "success"
+
 
 @eel.expose
 def logout():
@@ -334,7 +360,28 @@ def logout():
     print("🔒 User logged out.")
     return "success"
 
-# Jalankan Eel
-if __name__ == '__main__':
-    print("Running the app, u might wanna keep waiting just like arsenal fans waiting for ucl trophy...")
-    eel.start('register.html', mode='chrome', cmdline_args=['--start-fullscreen'], port=8001)
+
+# ====================================
+# DATETIME FORMAT HELPERS
+# ====================================
+@eel.expose
+def format_datetime(dt):
+    return dt.strftime("%Y-%m-%dT%H:%M:%S") if dt else None
+
+
+@eel.expose
+def format_date(d):
+    return d.strftime("%Y-%m-%dT00:00:00") if d else None
+
+
+# ====================================
+# START APP (Chrome fallback)
+# ====================================
+if __name__ == "__main__":
+    print("🚀 App running...")
+
+    try:
+        eel.start("register.html", mode="chrome", cmdline_args=["--start-fullscreen"], port=8001)
+    except:
+        print("⚠ Chrome not found. Opening in default window...")
+        eel.start("register.html", size=(1200, 800), port=8001)
