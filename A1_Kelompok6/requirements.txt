@@ -1,0 +1,14 @@
+eel==0.17.0
+mysql-connector-python==9.0.0
+opencv-python==4.10.0.84
+numpy==2.1.2
+Pillow==10.4.0
+python-dotenv==1.0.1
+matplotlib==3.8.0
+reportlab==4.0.7
+
+
+
+
+
+

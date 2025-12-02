@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelacak Absensi - AttendanceHub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="attendance-styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">AttendanceHub</div>
+        <div class="logo-subtitle">Manajemen Karyawan</div>
+      </div>
+
+      <ul class="sidebar-menu">
+        <!-- Removed all menu items except Dashboard and Attendance -->
+        <li class="menu-item">
+          <a href="index.html" class="menu-link">
+            <span>🏠</span>
+            <span>Dasbor</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="Attadance.html" class="menu-link active">
+            <span>⏱️</span>
+            <span>Absensi</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="reports.html" class="menu-link">
+            <span>📊</span>
+            <span>Reports & Analytics</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+                <div class="user-profile" id="userProfile">
+                    <div class="avatar">KV</div>
+                    <div class="user-info">
+                        <div class="user-name">Kevin Ifanka</div>
+                        <div class="user-role">IT DEPARTEMEN</div>
+                    </div>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="#" class="dropdown-item" onclick="logout(); return false;">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- HEADER -->
+      <div class="header">
+        <h1 class="header-title">Pelacak Absensi</h1>
+        <p class="header-subtitle">Lacak jam kerja dan waktu istirahat harian Anda.</p>
+      </div>
+
+      <!-- CONTENT GRID -->
+      <div class="attendance-content-grid">
+        <!-- LEFT: TIME CLOCK & CLOCK IN -->
+        <div>
+          <!-- TIME CLOCK CARD -->
+          <div class="card">
+            <div class="card-title">
+              <span style="margin-right: 8px;">⏰</span>Jam Kerja
+            </div>
+            
+            <div class="time-clock">
+              <div class="digital-clock" id="digitalClock">11:32:55 PM</div>
+              <div class="clock-date" id="clockDate">Selasa, 4 November 2025</div>
+            </div>
+
+            <div class="clock-status" id="clockStatus">Keluar</div>
+
+            <button class="btn-clock-in" id="clockInBtn" onclick="toggleClockIn()">
+              <span>▶</span> Masuk
+            </button>
+
+            <div class="location-info">
+            </div>
+            <div class="working-hours-info" style="margin-top: 12px; padding: 10px; background: #f3f4f6; border-radius: 6px; text-align: center; font-size: 13px; color: #374151;">
+              <strong>⏰ Jam Kerja:</strong> 08:30 - 17:00<br>
+              <small style="color: #6b7280;">Waktu masuk diharapkan sebelum 08:30</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: TODAY'S TIMELINE -->
+        <div>
+          <!-- TODAY'S TIMELINE CARD -->
+          <div class="card" id="timelineCard">
+            <div class="card-title">Linimasa Hari Ini</div>
+            <ul class="timeline-list" id="timelineList">
+              <!-- Timeline akan di-load dari backend -->
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS CARDS SECTION -->
+      <div class="attendance-stats-grid">
+        <!-- Total Hours Card -->
+        <div class="stat-card">
+          <div class="stat-content">
+            <div class="stat-label">Total Jam</div>
+            <div class="stat-value" id="totalHoursValue">0.00</div>
+            <div class="stat-unit">jam kerja</div>
+          </div>
+          <div class="stat-icon icon-blue">⏱️</div>
+        </div>
+
+        <!-- Break Time Card -->
+        <div class="stat-card">
+          <div class="stat-content">
+            <div class="stat-label">Waktu Istirahat</div>
+            <div class="stat-value">1.25</div>
+            <div class="stat-unit">jam total</div>
+          </div>
+          <div class="stat-icon icon-orange">☕</div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script type="text/javascript" src="/eel.js"></script>
+  <script src="user-utils.js"></script>
+  <script src="attendance-script.js"></script>
+</body>
+</html>
