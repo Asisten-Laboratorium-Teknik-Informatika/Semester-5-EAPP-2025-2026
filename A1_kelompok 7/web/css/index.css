@@ -1,0 +1,130 @@
+/* LOGIN PAGE - DESKTOP LAYOUT */
+.login-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.login-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 600px;
+}
+
+/* Left Side - Form */
+.login-form-section {
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-header h4 {
+  background: linear-gradient(135deg, #ecebfd, #dcdaf8);
+  color: #424273;
+  padding: 12px 30px;
+  border-radius: 25px;
+  display: inline-block;
+  font-weight: 600;
+  margin-bottom: 20px;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.login-header h1 {
+  margin: 15px 0 10px;
+  color: #2e2e4d;
+  font-size: 48px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2e2e4d, #4b4d70);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.login-header p {
+  color: #7a7da3;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.login-form {
+  margin-bottom: 30px;
+}
+
+.login-info {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #7a7da3;
+}
+
+.login-info h3 {
+  color: #2e2e4d;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.login-info p {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* Right Side - Quote */
+.login-quote-section {
+  background: linear-gradient(135deg, #4b4d70, #636390);
+  padding: 50px 40px;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.quote-content h3 {
+  color: white;
+  margin-bottom: 30px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.quote-text {
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.feature-icon {
+  background: rgba(255, 255, 255, 0.2);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+}

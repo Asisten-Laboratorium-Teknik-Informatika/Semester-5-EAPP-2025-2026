@@ -1,0 +1,177 @@
+/* PENERIMA PAGE - DESKTOP LAYOUT */
+.penerima-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 40px 0 20px;
+}
+
+.page-header h4 {
+  background: linear-gradient(135deg, #ecebfd, #dcdaf8);
+  color: #424273;
+  padding: 12px 30px;
+  border-radius: 25px;
+  display: inline-block;
+  font-weight: 600;
+  margin-bottom: 20px;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.page-header h1 {
+  margin: 15px 0;
+  color: #2e2e4d;
+  font-size: 42px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2e2e4d, #4b4d70);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Progress Steps */
+.progress-steps {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  padding: 0 40px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 60%;
+  right: -40%;
+  height: 3px;
+  background: #e9ecef;
+  z-index: 1;
+}
+
+.step.completed:not(:last-child)::after {
+  background: #28a745;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e9ecef;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.step.completed .step-number {
+  background: #28a745;
+  color: white;
+}
+
+.step.active .step-number {
+  background: #4b4d70;
+  color: white;
+  box-shadow: 0 4px 12px rgba(75, 77, 112, 0.3);
+}
+
+.step-label {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.step.active .step-label {
+  color: #4b4d70;
+  font-weight: 600;
+}
+
+/* Form Section */
+.form-section {
+  padding: 0 40px 40px;
+}
+
+/* Link Style */
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #7a7da3;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  margin-top: 10px;
+}
+
+.btn-link:hover {
+  color: #4b4d70;
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+
+/* Info Panel */
+.info-panel {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 25px;
+  border-radius: 16px;
+  border-left: 5px solid #7a7da3;
+  margin-bottom: 25px;
+}
+
+.info-panel h3 {
+  color: #2e2e4d;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.donor-info p {
+  margin-bottom: 8px;
+  color: #495057;
+  font-size: 14px;
+}
+
+/* Textarea */
+.form-control[rows] {
+  resize: vertical;
+  min-height: 120px;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.5;
+}
+
+/* Action Buttons */
+.form-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.form-actions .btn {
+  min-width: 200px;
+  padding: 16px 30px;
+  font-size: 16px;
+  font-weight: 600;
+}

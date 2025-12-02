@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan Donasi - Sistem Donasi</title>
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/donasi.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <h1>SISTEM DONASI</h1>
+          <p>Manage Donations Efficiently</p>
+        </div>
+        <div class="nav-actions">
+          <button onclick="goHome()" class="btn btn-primary">Dashboard Utama</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <div class="card donasi-container">
+          <!-- Header Section -->
+          <div class="page-header">
+            <h4>Laporan & Analytics</h4>
+            <h1>Data Donasi</h1>
+            <p class="page-subtitle">Monitor seluruh aktivitas donasi dalam sistem</p>
+          </div>
+
+          <!-- Stats Overview -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="totalDonasi">Rp 0</div>
+              <div class="stat-label">Total Donasi</div>
+              <div class="stat-trend">+12% dari bulan lalu</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalDonatur">0</div>
+              <div class="stat-label">Jumlah Donatur</div>
+              <div class="stat-trend">+5 donatur baru</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalPenerima">0</div>
+              <div class="stat-label">Penerima Manfaat</div>
+              <div class="stat-trend">3 panti aktif</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalTransaksi">0</div>
+              <div class="stat-label">Total Transaksi</div>
+              <div class="stat-trend">+8 transaksi</div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="activity-section">
+            <div class="section-header">
+              <h3>Transaksi Donasi Terbaru</h3>
+              <div class="filter-options">
+                <select class="form-control" style="width: auto">
+                  <option>Semua Donasi</option>
+                  <option>Minggu Ini</option>
+                  <option>Bulan Ini</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="table" id="donasiTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Donatur</th>
+                    <th>Penerima</th>
+                    <th>Jumlah Donasi</th>
+                    <th>Tanggal</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="6" class="text-center">Memuat data donasi...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="action-section">
+            <div class="grid-3">
+              <div class="action-card">
+                <h4>Tambah Donatur</h4>
+                <p>Input data donatur baru ke dalam sistem</p>
+                <button onclick="window.location.href='donatur.html'" class="btn btn-primary">Tambah</button>
+              </div>
+              <div class="action-card">
+                <h4>Kelola Penerima</h4>
+                <p>Manage data penerima donasi</p>
+                <button onclick="window.location.href='penerima.html'" class="btn btn-success">Kelola</button>
+              </div>
+              <div class="action-card">
+                <h4>Data Panti</h4>
+                <p>Lihat dan kelola panti asuhan</p>
+                <button onclick="window.location.href='daftar_panti.html'" class="btn btn-secondary">Lihat</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quote Section -->
+          <div class="quote-section">
+            <p class="quote-text">Sesungguhnya Tuhan menyayangi dan memberkahi orang-orang yang memberikan sebagian dari harta mereka.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
