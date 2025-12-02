@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics - AttendanceHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .reports-container {
+            padding: 20px;
+        }
+        
+        .feature-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-title i {
+            color: #3b82f6;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .result-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .result-box.error {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        
+        .result-box.success {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">AttendanceHub</div>
+                <div class="logo-subtitle">Employee Management</div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="index.html" class="menu-link">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="Attadance.html" class="menu-link">
+                        <i class="fas fa-clock"></i>
+                        <span>Attendance</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="reports.html" class="menu-link active">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports & Analytics</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-profile" id="userProfile">
+                    <div class="avatar">KV</div>
+                    <div class="user-info">
+                        <div class="user-name">Kevin Ifanka</div>
+                        <div class="user-role">IT DEPARTEMEN</div>
+                    </div>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="#" class="dropdown-item" onclick="logout(); return false;">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <div class="header">
+                <h1 class="header-title">Reports & Analytics</h1>
+                <p class="header-subtitle">Laporan, statistik, dan analitik absensi karyawan</p>
+            </div>
+
+            <div class="reports-container">
+                <!-- FITUR 1: Export to CSV -->
+                <div class="feature-section">
+                    <div class="feature-title">
+                        <i class="fas fa-file-export"></i>
+                        <span>1. Export Data Absensi ke CSV</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tanggal Mulai</label>
+                            <input type="date" id="exportStartDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Akhir</label>
+                            <input type="date" id="exportEndDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Employee ID (Opsional)</label>
+                        <input type="text" id="exportEmployeeId" placeholder="Kosongkan untuk semua karyawan">
+                    </div>
+                    <button class="btn btn-primary" onclick="exportToCSV()">
+                        <i class="fas fa-download"></i> Export ke CSV
+                    </button>
+                    <div id="exportResult"></div>
+                </div>
+
+                <!-- FITUR 2: Laporan Bulanan/Mingguan -->
+                <div class="feature-section">
+                    <div class="feature-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>2. Laporan Bulanan/Mingguan</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tanggal Mulai</label>
+                            <input type="date" id="reportStartDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Akhir</label>
+                            <input type="date" id="reportEndDate" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Employee ID (Opsional)</label>
+                        <input type="text" id="reportEmployeeId" placeholder="Kosongkan untuk semua karyawan">
+                    </div>
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i class="fas fa-chart-line"></i> Generate Laporan
+                    </button>
+                    <div id="reportResult"></div>
+                </div>
+
+                <!-- FITUR 3: Deteksi Keterlambatan -->
+                <div class="feature-section">
+                    <div class="feature-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>3. Deteksi Keterlambatan</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tanggal</label>
+                            <input type="date" id="lateCheckDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Employee ID (Opsional)</label>
+                            <input type="text" id="lateCheckEmployeeId" placeholder="Kosongkan untuk user saat ini">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkLate()">
+                        <i class="fas fa-search"></i> Cek Keterlambatan
+                    </button>
+                    <div id="lateResult"></div>
+                </div>
+
+                <!-- FITUR 4: Statistik dan Analitik -->
+                <div class="feature-section">
+                    <div class="feature-title">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>4. Statistik dan Analitik</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Periode (Hari)</label>
+                            <select id="statsDays">
+                                <option value="7">7 Hari Terakhir</option>
+                                <option value="30" selected>30 Hari Terakhir</option>
+                                <option value="60">60 Hari Terakhir</option>
+                                <option value="90">90 Hari Terakhir</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Employee ID (Opsional)</label>
+                            <input type="text" id="statsEmployeeId" placeholder="Kosongkan untuk semua karyawan">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="getStatistics()">
+                        <i class="fas fa-calculator"></i> Hitung Statistik
+                    </button>
+                    <div id="statsResult"></div>
+                </div>
+
+                <!-- FITUR 5: Pencarian dan Filter -->
+                <div class="feature-section">
+                    <div class="feature-title">
+                        <i class="fas fa-search"></i>
+                        <span>5. Pencarian dan Filter Data Absensi</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tanggal Mulai</label>
+                            <input type="date" id="searchStartDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Akhir</label>
+                            <input type="date" id="searchEndDate">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Employee ID</label>
+                            <input type="text" id="searchEmployeeId" placeholder="Opsional">
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Karyawan</label>
+                            <input type="text" id="searchEmployeeName" placeholder="Opsional">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Departemen</label>
+                            <input type="text" id="searchDepartment" placeholder="Opsional">
+                        </div>
+                        <div class="form-group">
+                            <label>Jam Kerja Min</label>
+                            <input type="number" id="searchMinHours" step="0.1" placeholder="Opsional">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Jam Kerja Max</label>
+                            <input type="number" id="searchMaxHours" step="0.1" placeholder="Opsional">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="searchLateOnly"> Hanya yang terlambat
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="searchRecords()">
+                        <i class="fas fa-filter"></i> Cari Data
+                    </button>
+                    <div id="searchResult"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="user-utils.js"></script>
+    <script src="reports-script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

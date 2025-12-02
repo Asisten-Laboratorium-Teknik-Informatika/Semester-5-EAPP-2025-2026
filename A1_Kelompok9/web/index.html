@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Big Five Personality Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Menambahkan Chart.js library untuk menampilkan grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+  </head>
+  <body>
+    <!-- Screen 1: Home -->
+    <div class="screen active" id="home-screen">
+      <!-- Landing Page -->
+      <section id="landing">
+        <nav class="navbar">
+          <div class="logo">
+            <div class="logo-icon">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="8" fill="#008558" />
+                <path
+                  d="M8 16C8 11.5817 11.5817 8 16 8C20.4183 8 24 11.5817 24 16C24 20.4183 20.4183 24 16 24"
+                  stroke="white"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                />
+                <circle cx="16" cy="16" r="4" fill="white" />
+              </svg>
+            </div>
+            <span class="logo-text">OCEAN Test</span>
+          </div>
+          <div class="nav-links">
+            <a href="#" class="nav-link">Tentang</a>
+            <a href="#" class="nav-link">Metodologi</a>
+            <a href="#" class="nav-link">Kontak</a>
+          </div>
+        </nav>
+
+        <div class="hero">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                />
+              </svg>
+              Tes Kepribadian Ilmiah
+            </div>
+            <h1 class="hero-title">
+              Kenali Diri Anda<br /><span class="highlight">Lebih Dalam</span>
+            </h1>
+            <p class="hero-description">
+              Temukan 5 dimensi kepribadian Anda melalui tes psikologi yang
+              telah divalidasi secara ilmiah. Pahami kekuatan dan area
+              pengembangan diri Anda.
+            </p>
+            <button class="btn-primary" onclick="startTest()">
+              Mulai Tes Sekarang
+              <svg
+                class="btn-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+            <div class="hero-stats">
+              <div class="stat-item">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12,6 12,12 16,14" />
+                </svg>
+                <span>5-10 menit</span>
+              </div>
+              <div class="stat-item">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22,4 12,14.01 9,11.01" />
+                </svg>
+                <span>100% Gratis</span>
+              </div>
+              <div class="stat-item">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+                <span>Hasil Instan</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="personality-card">
+              <div class="card-header">
+                <span class="card-label">Hasil Contoh</span>
+                <span class="card-badge">OCEAN</span>
+              </div>
+              <div class="mini-chart">
+                <div class="chart-bar">
+                  <span class="bar-label">O</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 85%"></div>
+                  </div>
+                  <span class="bar-value">85%</span>
+                </div>
+                <div class="chart-bar">
+                  <span class="bar-label">C</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 72%"></div>
+                  </div>
+                  <span class="bar-value">72%</span>
+                </div>
+                <div class="chart-bar">
+                  <span class="bar-label">E</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 68%"></div>
+                  </div>
+                  <span class="bar-value">68%</span>
+                </div>
+                <div class="chart-bar">
+                  <span class="bar-label">A</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 90%"></div>
+                  </div>
+                  <span class="bar-value">90%</span>
+                </div>
+                <div class="chart-bar">
+                  <span class="bar-label">N</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 45%"></div>
+                  </div>
+                  <span class="bar-value">45%</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-avatar">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <span>Profil kepribadian lengkap</span>
+              </div>
+            </div>
+            <div class="floating-badge badge-1">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                />
+              </svg>
+              <span>Gratis</span>
+            </div>
+            <div class="floating-badge badge-2">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22,4 12,14.01 9,11.01" />
+              </svg>
+              <span>Akurat</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Added info stats section with tagline, questions count, and data points -->
+        <div class="info-stats">
+          <div class="info-stats-container">
+            <div class="info-card info-tagline">
+              <p>
+                Temukan tipe kepribadian Anda secara tepat dengan menyelesaikan
+                tes kami.
+              </p>
+            </div>
+            <div class="info-card info-stat">
+              <span class="stat-number">50</span>
+              <span class="stat-label">Pertanyaan</span>
+            </div>
+            <div class="info-card info-stat">
+              <span class="stat-number">150</span>
+              <span class="stat-label">Data poin dianalisis</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Added "How it works" section with 3 steps -->
+        <div class="how-it-works">
+          <div class="how-it-works-container">
+            <h2 class="how-title">Cara Kerja</h2>
+
+            <div class="steps-grid">
+              <div class="step-card">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Persiapkan diri Anda</h3>
+                <p class="step-desc">
+                  Pastikan Anda berada dalam kondisi rileks dan lingkungan yang
+                  kondusif untuk berkonsentrasi pada tes.
+                </p>
+              </div>
+
+              <div class="step-card">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Selesaikan tes</h3>
+                <p class="step-desc">
+                  Jawab 50 pertanyaan yang dirancang untuk mengungkap berbagai
+                  aspek kepribadian Anda.
+                </p>
+              </div>
+
+              <div class="step-card">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Terima insight Anda</h3>
+                <p class="step-desc">
+                  Akses laporan Anda untuk menjelajahi berbagai tipe kepribadian
+                  dan temukan di mana posisi Anda!
+                </p>
+              </div>
+            </div>
+
+            <button class="btn-primary btn-start-test" onclick="startTest()">
+              Mulai Big 5 Test
+              <svg
+                class="btn-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">O</div>
+            <h3 class="feature-title">Openness</h3>
+            <p class="feature-desc">
+              Keterbukaan terhadap pengalaman baru dan kreativitas
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">C</div>
+            <h3 class="feature-title">Conscientiousness</h3>
+            <p class="feature-desc">Tingkat kedisiplinan dan tanggung jawab</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">E</div>
+            <h3 class="feature-title">Extraversion</h3>
+            <p class="feature-desc">Tingkat energi sosial dan interaksi</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">A</div>
+            <h3 class="feature-title">Agreeableness</h3>
+            <p class="feature-desc">
+              Kecenderungan untuk bekerja sama dan empati
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">N</div>
+            <h3 class="feature-title">Neuroticism</h3>
+            <p class="feature-desc">Stabilitas emosional dan ketahanan stres</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Screen 2: Guidelines -->
+    <div class="screen" id="guidelines-screen">
+      <!-- Test Guidelines Page -->
+      <section id="guidelines">
+        <div class="guidelines-container">
+          <div class="guidelines-card">
+            <!-- Illustration -->
+            <div class="guidelines-illustration">
+              <div class="illustration-circle"></div>
+              <div class="illustration-form">
+                <svg
+                  width="120"
+                  height="140"
+                  viewBox="0 0 120 140"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <!-- Form outline -->
+                  <rect
+                    x="10"
+                    y="10"
+                    width="100"
+                    height="120"
+                    rx="8"
+                    stroke="#1a1a1a"
+                    stroke-width="2"
+                    fill="white"
+                  />
+                  <!-- Line 1 -->
+                  <rect
+                    x="25"
+                    y="30"
+                    width="50"
+                    height="4"
+                    rx="2"
+                    fill="#e0e0e0"
+                  />
+                  <!-- Radio buttons row 1 -->
+                  <circle
+                    cx="30"
+                    cy="50"
+                    r="6"
+                    stroke="#e0e0e0"
+                    stroke-width="2"
+                    fill="white"
+                  />
+                  <circle
+                    cx="48"
+                    cy="50"
+                    r="6"
+                    stroke="#e0e0e0"
+                    stroke-width="2"
+                    fill="white"
+                  />
+                  <circle
+                    cx="66"
+                    cy="50"
+                    r="6"
+                    stroke="#e0e0e0"
+                    stroke-width="2"
+                    fill="white"
+                  />
+                  <circle
+                    cx="84"
+                    cy="50"
+                    r="6"
+                    stroke="#008558"
+                    stroke-width="2"
+                    fill="#008558"
+                  />
+                  <circle cx="84" cy="50" r="3" fill="white" />
+                  <!-- Line 2 -->
+                  <circle
+                    cx="30"
+                    cy="75"
+                    r="6"
+                    stroke="#008558"
+                    stroke-width="2"
+                    fill="#008558"
+                  />
+                  <circle cx="30" cy="75" r="3" fill="white" />
+                  <rect
+                    x="43"
+                    y="73"
+                    width="45"
+                    height="4"
+                    rx="2"
+                    fill="#e0e0e0"
+                  />
+                  <!-- Radio buttons row 2 -->
+                  <circle
+                    cx="30"
+                    cy="95"
+                    r="6"
+                    stroke="#e0e0e0"
+                    stroke-width="2"
+                    fill="white"
+                  />
+                  <circle
+                    cx="48"
+                    cy="95"
+                    r="6"
+                    stroke="#e0e0e0"
+                    stroke-width="2"
+                    fill="white"
+                  />
+                  <circle
+                    cx="66"
+                    cy="95"
+                    r="6"
+                    stroke="#008558"
+                    stroke-width="2"
+                    fill="#008558"
+                  />
+                  <circle cx="66" cy="95" r="3" fill="white" />
+                  <circle
+                    cx="84"
+                    cy="95"
+                    r="6"
+                    stroke="#e0e0e0"
+                    stroke-width="2"
+                    fill="white"
+                  />
+                  <!-- Submit button -->
+                  <rect
+                    x="25"
+                    y="110"
+                    width="70"
+                    height="12"
+                    rx="4"
+                    fill="#1a1a1a"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Title -->
+            <h2 class="guidelines-title">Panduan Tes</h2>
+
+            <!-- Guidelines list -->
+            <ul class="guidelines-list">
+              <li class="guideline-item">
+                <div class="guideline-check">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <polyline points="20,6 9,17 4,12" />
+                  </svg>
+                </div>
+                <span
+                  >Jawab setiap pernyataan berdasarkan pendapat pribadi
+                  Anda</span
+                >
+              </li>
+              <li class="guideline-item">
+                <div class="guideline-check">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <polyline points="20,6 9,17 4,12" />
+                  </svg>
+                </div>
+                <span
+                  >Anda tidak bisa melewati pertanyaan, tetapi dapat kembali ke
+                  pertanyaan sebelumnya</span
+                >
+              </li>
+              <li class="guideline-item">
+                <div class="guideline-check">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <polyline points="20,6 9,17 4,12" />
+                  </svg>
+                </div>
+                <span
+                  >Tidak ada jawaban benar atau salah, jadilah diri
+                  sendiri</span
+                >
+              </li>
+            </ul>
+
+            <!-- Start button -->
+            <button
+              class="btn-primary btn-guidelines-start"
+              onclick="startActualTest()"
+            >
+              Mulai Tes
+              <svg
+                class="btn-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Screen 3: Test -->
+    <div class="screen" id="test-screen">
+      <!-- Test Page -->
+      <section id="test">
+        <div class="test-page-container">
+          <!-- Top header with progress -->
+          <div class="test-top-header">
+            <span class="progress-percent" id="progress-percent">0 %</span>
+            <span class="step-indicator" id="step-indicator">Step 1 of 10</span>
+          </div>
+
+          <!-- Main instruction -->
+          <h2 class="test-instruction">
+            Pilih seberapa akurat setiap pernyataan menggambarkan dirimu.
+          </h2>
+
+          <!-- Legend row -->
+          <div class="scale-legend">
+            <div class="legend-item">
+              <div class="legend-circle legend-1"></div>
+              <span>Sangat<br />Tidak Setuju</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-circle legend-2"></div>
+              <span>Tidak Setuju</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-circle legend-3"></div>
+              <span>Netral</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-circle legend-4"></div>
+              <span>Setuju</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-circle legend-5"></div>
+              <span>Sangat<br />Setuju</span>
+            </div>
+          </div>
+
+          <!-- Questions container -->
+          <div class="questions-list" id="questions-list">
+            <!-- Questions will be rendered here by JS -->
+          </div>
+
+          <!-- Footer note -->
+          <p class="test-note">
+            Seluruh pertanyaan harus dijawab sebelum melanjutkan.
+          </p>
+
+          <!-- Next button -->
+          <button
+            class="btn-next-page"
+            id="btn-next-page"
+            onclick="nextPage()"
+            disabled
+          >
+            Next
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Screen 4: User Info Form -->
+    <div class="screen" id="user-form-screen">
+      <div class="user-form-container">
+        <div class="user-form-card">
+          <div class="form-header">
+            <div class="form-icon">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <h2 class="form-title">Lengkapi Data Diri</h2>
+            <p class="form-subtitle">
+              Isi informasi berikut untuk melihat hasil analisis kepribadian
+              Anda
+            </p>
+          </div>
+
+          <form
+            class="user-info-form"
+            id="user-info-form"
+            onsubmit="submitUserForm(event)"
+          >
+            <!-- Nama Lengkap -->
+            <div class="form-group">
+              <label for="user-name">
+                <span class="label-text">Nama Lengkap</span>
+                <span class="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="user-name"
+                name="name"
+                placeholder="Masukkan nama lengkap Anda"
+                required
+              />
+            </div>
+
+            <!-- Row: Tanggal Lahir & Jenis Kelamin -->
+            <div class="form-row-grid">
+              <div class="form-group">
+                <label for="user-dob">
+                  <span class="label-text">Tanggal Lahir</span>
+                  <span class="required">*</span>
+                </label>
+                <input type="date" id="user-dob" name="dob" required />
+              </div>
+              <div class="form-group">
+                <label for="user-gender">
+                  <span class="label-text">Jenis Kelamin</span>
+                  <span class="required">*</span>
+                </label>
+                <select id="user-gender" name="gender" required>
+                  <option value="">Pilih</option>
+                  <option value="male">Laki-laki</option>
+                  <option value="female">Perempuan</option>
+                  <option value="other">Lainnya</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row: Pendidikan & Pekerjaan -->
+            <div class="form-row-grid">
+              <div class="form-group">
+                <label for="user-education">
+                  <span class="label-text">Pendidikan Terakhir</span>
+                </label>
+                <select id="user-education" name="education">
+                  <option value="">Pilih</option>
+                  <option value="sd">SD</option>
+                  <option value="smp">SMP</option>
+                  <option value="sma">SMA/SMK</option>
+                  <option value="diploma">Diploma</option>
+                  <option value="s1">Sarjana (S1)</option>
+                  <option value="s2">Magister (S2)</option>
+                  <option value="s3">Doktor (S3)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="user-occupation">
+                  <span class="label-text">Pekerjaan</span>
+                </label>
+                <select id="user-occupation" name="occupation">
+                  <option value="">Pilih</option>
+                  <option value="student">Pelajar/Mahasiswa</option>
+                  <option value="employee">Karyawan</option>
+                  <option value="entrepreneur">Wirausaha</option>
+                  <option value="professional">Profesional</option>
+                  <option value="freelancer">Freelancer</option>
+                  <option value="unemployed">Belum Bekerja</option>
+                  <option value="retired">Pensiunan</option>
+                  <option value="other">Lainnya</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="user-email">
+                <span class="label-text">Email</span>
+                <span class="optional-badge">Opsional</span>
+              </label>
+              <input
+                type="email"
+                id="user-email"
+                name="email"
+                placeholder="email@contoh.com"
+              />
+              <span class="form-hint"
+                >Untuk menerima hasil analisis lengkap</span
+              >
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-primary btn-submit-form">
+              <span>Lihat Hasil Saya</span>
+              <svg
+                class="btn-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 5: Results -->
+    <div class="screen" id="results-screen">
+      <!-- Updated Results Page with better chart and layout -->
+      <section id="results">
+        <div class="results-container">
+          <div class="results-header">
+            <div class="results-badge">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22,4 12,14.01 9,11.01" />
+              </svg>
+              Tes Selesai
+            </div>
+            <h1 class="results-title">Hasil Tes Kepribadian</h1>
+            <p class="results-subtitle" id="results-user-name">
+              Berdasarkan model Big Five Personality (OCEAN)
+            </p>
+          </div>
+
+          <!-- User info summary -->
+          <div class="results-user-summary" id="results-user-summary"></div>
+
+          <!-- Charts Section -->
+          <div class="results-charts">
+            <div class="chart-card">
+              <h3 class="chart-title">Radar Chart - Profil OCEAN</h3>
+              <div class="chart-wrapper">
+                <canvas id="radarChart"></canvas>
+              </div>
+            </div>
+            <div class="chart-card">
+              <h3 class="chart-title">Bar Chart - Skor per Dimensi</h3>
+              <div class="chart-wrapper">
+                <canvas id="barChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Results -->
+          <div class="results-breakdown">
+            <h3 class="breakdown-title">Detail Skor Anda</h3>
+            <div class="results-details" id="results-details">
+              <!-- Will be populated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Interpretations -->
+          <div class="results-interpretations" id="results-interpretations">
+            <!-- Will be populated by JavaScript -->
+          </div>
+
+          <div class="results-actions">
+            <button class="btn-primary" onclick="retakeTest()">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M1 4v6h6M23 20v-6h-6" />
+                <path
+                  d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"
+                />
+              </svg>
+              Ulangi Tes
+            </button>
+            <button class="btn-secondary" onclick="downloadResults()">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Unduh Hasil
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

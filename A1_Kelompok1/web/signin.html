@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriPlan – Sign In</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- WAJIB DILETAKKAN SEBELUM script.js -->
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <!-- LEFT -->
+    <div class="auth-left">
+        <h1>Sign in to sign up</h1>
+
+        <div class="social-icons">
+            <img src="images/signin_signup/google.png" alt="Google">
+            <img src="images/signin_signup/facebook.png" alt="Facebook">
+            <img src="images/signin_signup/linkedin.png" alt="LinkedIn">
+        </div>
+
+        <p class="small-text">or use your email account</p>
+
+        <div class="input-box">
+            <input id="login-email" type="email" placeholder="Email">
+        </div>
+
+        <div class="input-box">
+            <input id="login-password" type="password" placeholder="Password">
+        </div>
+
+        
+
+        <button id="login-btn" class="auth-btn">Sign In</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="auth-right">
+        <h1>Welcome Back!</h1>
+
+        <img src="images/signin_signup/nutriplan-logo.png" class="logo" alt="NutriPlan Logo">
+
+        <button class="auth-btn-outline" onclick="location.href='signup.html'">Sign Up</button>
+
+        <p class="small-text">Don’t have an account?</p>
+    </div>
+
+</div>
+
+</body>
+</html>
