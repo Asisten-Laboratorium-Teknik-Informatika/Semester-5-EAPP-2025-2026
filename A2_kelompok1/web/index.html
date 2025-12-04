@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Parkir Modern</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i data-lucide="parking-circle" class="icon"></i>
+                    <div>
+                        <h1>SISTEM PARKIR</h1>
+                        <p class="subtitle">Manajemen Parkir Digital Terpadu</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="user-info" id="userInfo">
+                        <i data-lucide="user" class="user-icon"></i>
+                        <span id="userName">User</span>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="handleLogout()">
+                        <i data-lucide="log-out" class="btn-icon"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card stat-primary">
+                <div class="stat-icon"><i data-lucide="car"></i></div>
+                <div class="stat-content">
+                    <div class="stat-number" id="statParkir">0</div>
+                    <div class="stat-label">Kendaraan Parkir</div>
+                </div>
+            </div>
+            <div class="stat-card stat-success">
+                <div class="stat-icon"><i data-lucide="check-circle"></i></div>
+                <div class="stat-content">
+                    <div class="stat-number" id="statHariIni">0</div>
+                    <div class="stat-label">Transaksi Hari Ini</div>
+                </div>
+            </div>
+            <div class="stat-card stat-warning">
+                <div class="stat-icon"><i data-lucide="dollar-sign"></i></div>
+                <div class="stat-content">
+                    <div class="stat-number" id="statPendapatan">Rp 0</div>
+                    <div class="stat-label">Pendapatan Hari Ini</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showPage('input')">
+                <i data-lucide="car" class="tab-icon"></i> Input Kendaraan
+            </button>
+            <button class="nav-tab" onclick="showPage('parkir')">
+                <i data-lucide="clock" class="tab-icon"></i> Sedang Parkir
+            </button>
+            <button class="nav-tab" onclick="showPage('riwayat')">
+                <i data-lucide="file-text" class="tab-icon"></i> Riwayat
+            </button>
+            <button class="nav-tab" onclick="showPage('visualisasi')">
+                <i data-lucide="bar-chart" class="tab-icon"></i> Visualisasi
+            </button>
+        </div>
+
+        <!-- Halaman Input Kendaraan -->
+        <div id="page-input" class="page active">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i data-lucide="edit"></i> Input Kendaraan Masuk</h2>
+                    <p class="card-subtitle">Masukkan data kendaraan yang baru masuk</p>
+                </div>
+                <form id="formMasuk" onsubmit="event.preventDefault(); kendaraanMasuk();">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="plat">
+                                <i data-lucide="hash" class="label-icon"></i> Nomor Plat
+                            </label>
+                            <input type="text" id="plat" placeholder="Contoh: BK1234AB" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jenis">
+                                <i data-lucide="car" class="label-icon"></i> Jenis Kendaraan
+                            </label>
+                            <select id="jenis" required>
+                                <option value="Motor">Motor</option>
+                                <option value="Mobil">Mobil</option>
+                                <option value="Truk">Truk</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Pickup">Pickup</option>
+                                <option value="Sepeda">Sepeda</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tarif-info">
+                        <h3><i data-lucide="info"></i> Informasi Tarif Parkir</h3>
+                        <div class="tarif-grid">
+                            <div class="tarif-item">
+                                <i data-lucide="bike" class="tarif-icon"></i>
+                                <span class="tarif-label">Sepeda</span>
+                                <span class="tarif-price">Rp 1.000/jam</span>
+                            </div>
+                            <div class="tarif-item">
+                                <i data-lucide="bike" class="tarif-icon"></i>
+                                <span class="tarif-label">Motor</span>
+                                <span class="tarif-price">Rp 2.000/jam</span>
+                            </div>
+                            <div class="tarif-item">
+                                <i data-lucide="car" class="tarif-icon"></i>
+                                <span class="tarif-label">Mobil</span>
+                                <span class="tarif-price">Rp 5.000/jam</span>
+                            </div>
+                            <div class="tarif-item">
+                                <i data-lucide="truck" class="tarif-icon"></i>
+                                <span class="tarif-label">Pickup</span>
+                                <span class="tarif-price">Rp 7.000/jam</span>
+                            </div>
+                            <div class="tarif-item">
+                                <i data-lucide="truck" class="tarif-icon"></i>
+                                <span class="tarif-label">Truk</span>
+                                <span class="tarif-price">Rp 10.000/jam</span>
+                            </div>
+                            <div class="tarif-item">
+                                <i data-lucide="truck" class="tarif-icon"></i>
+                                <span class="tarif-label">Bus</span>
+                                <span class="tarif-price">Rp 15.000/jam</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i data-lucide="arrow-right" class="btn-icon"></i> Masuk Parkir
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Halaman Kendaraan Sedang Parkir -->
+        <div id="page-parkir" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i data-lucide="clock"></i> Kendaraan Sedang Parkir</h2>
+                    <p class="card-subtitle">Daftar kendaraan yang masih di area parkir</p>
+                </div>
+                <div class="search-section">
+                    <div class="filter-grid">
+                        <div class="form-group">
+                            <label for="searchPlatParkir">
+                                <i data-lucide="search" class="label-icon"></i> Cari Berdasarkan Plat
+                            </label>
+                            <div class="search-input-wrapper">
+                                <input type="text" id="searchPlatParkir" placeholder="Masukkan nomor plat (contoh: BK1234AB)" oninput="searchParkirByPlat()">
+                                <button class="btn-search-clear" id="clearSearchParkir" onclick="clearSearchParkir()" style="display: none;">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterJenisParkir">
+                                <i data-lucide="filter" class="label-icon"></i> Filter Jenis Kendaraan
+                            </label>
+                            <select id="filterJenisParkir" onchange="filterParkirByJenis()">
+                                <option value="all">Semua Jenis</option>
+                                <option value="Motor">Motor</option>
+                                <option value="Mobil">Mobil</option>
+                                <option value="Truk">Truk</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Pickup">Pickup</option>
+                                <option value="Sepeda">Sepeda</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Plat Nomor</th>
+                                <th>Jenis</th>
+                                <th>Waktu Masuk</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableParkir">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <div class="empty-icon"><i data-lucide="car"></i></div>
+                                    <p>Tidak ada kendaraan parkir</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Riwayat -->
+        <div id="page-riwayat" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i data-lucide="file-text"></i> Riwayat Parkir</h2>
+                    <p class="card-subtitle">Riwayat transaksi parkir yang telah selesai</p>
+                </div>
+                <div class="search-section">
+                    <div class="form-group">
+                        <label for="searchPlat">
+                            <i data-lucide="search" class="label-icon"></i> Cari Berdasarkan Plat
+                        </label>
+                        <div class="search-input-wrapper">
+                            <input type="text" id="searchPlat" placeholder="Masukkan nomor plat (contoh: BK1234AB)" oninput="searchRiwayatByPlat()">
+                            <button class="btn-search-clear" id="clearSearch" onclick="clearSearch()" style="display: none;">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <div class="filter-grid">
+
+                        <!-- Dropdown Filter Waktu -->
+                        <div class="form-group">
+                            <label for="filterRange">
+                                <i data-lucide="clock" class="label-icon"></i> Filter Waktu
+                            </label>
+                            <select id="filterRange">
+                                <option value="all">Semua</option>
+                                <option value="today">Hari Ini</option>
+                                <option value="yesterday">Kemarin</option>
+                                <option value="week">Minggu Ini</option>
+                                <option value="month">Bulan Ini</option>
+                                <option value="year">Tahun Ini</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-buttons">
+                            <button class="btn btn-secondary" onclick="filterRiwayatWaktu()">
+                                <i data-lucide="filter" class="btn-icon"></i> Terapkan
+                            </button>
+                            <button class="btn btn-outline" onclick="resetFilter()">
+                                <i data-lucide="refresh-cw" class="btn-icon"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Plat Nomor</th>
+                                <th>Jenis</th>
+                                <th>Masuk</th>
+                                <th>Keluar</th>
+                                <th class="text-center">Durasi</th>
+                                <th class="text-right">Biaya</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableRiwayat">
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <div class="empty-icon"><i data-lucide="file-text"></i></div>
+                                    <p>Belum ada riwayat</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Visualisasi Data -->
+        <div id="page-visualisasi" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i data-lucide="bar-chart"></i> Visualisasi Data</h2>
+                    <p class="card-subtitle">Analisis dan monitoring data parkir</p>
+                </div>
+                
+                <div class="chart-controls">
+                    <div class="form-group">
+                        <label for="chartDaysRange">
+                            <i data-lucide="calendar" class="label-icon"></i> Rentang Hari
+                        </label>
+                        <select id="chartDaysRange" onchange="loadChartData()">
+                            <option value="7">7 Hari Terakhir</option>
+                            <option value="14">14 Hari Terakhir</option>
+                            <option value="30">30 Hari Terakhir</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <!-- Chart Transaksi Per Hari -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i data-lucide="trending-up"></i> Transaksi Per Hari</h3>
+                            <p class="chart-subtitle">Jumlah transaksi parkir per hari</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chartTransaksiHari"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart Pendapatan Per Hari -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i data-lucide="dollar-sign"></i> Pendapatan Per Hari</h3>
+                            <p class="chart-subtitle">Total pendapatan parkir per hari</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chartPendapatanHari"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart Transaksi Per Jenis -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i data-lucide="pie-chart"></i> Transaksi Per Jenis Kendaraan</h3>
+                            <p class="chart-subtitle">Distribusi transaksi berdasarkan jenis</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chartPerJenis"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart Transaksi Per Jam -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i data-lucide="clock"></i> Transaksi Per Jam</h3>
+                            <p class="chart-subtitle">Jam-jam ramai parkir (7 hari terakhir)</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chartPerJam"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart Transaksi Per Hari dalam Minggu -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i data-lucide="calendar-days"></i> Transaksi Per Hari dalam Minggu</h3>
+                            <p class="chart-subtitle">Hari paling ramai dan sepi (30 hari terakhir)</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chartHariMinggu"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart Pendapatan Per Hari dalam Minggu -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i data-lucide="wallet"></i> Pendapatan Per Hari dalam Minggu</h3>
+                            <p class="chart-subtitle">Pendapatan berdasarkan hari dalam minggu</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chartPendapatanHariMinggu"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            // Load user info
+            const userStr = sessionStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    const userNameEl = document.getElementById('userName');
+                    if (userNameEl) {
+                        userNameEl.textContent = user.nama_lengkap || user.username;
+                    }
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                }
+            }
+            
+            return true;
+        }
+        
+        // Handle logout
+        function handleLogout() {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                sessionStorage.removeItem('user');
+                sessionStorage.removeItem('isLoggedIn');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Fungsi untuk navigasi antar halaman
+        function showPage(pageName) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            document.getElementById('page-' + pageName).classList.add('active');
+            event.target.closest('.nav-tab').classList.add('active');
+            
+            // Load data saat pindah halaman
+            if (pageName === 'parkir') {
+                loadKendaraanParkir();
+                // Reset filters when switching to parkir page
+                setTimeout(() => {
+                    document.getElementById('searchPlatParkir').value = '';
+                    document.getElementById('filterJenisParkir').value = 'all';
+                    document.getElementById('clearSearchParkir').style.display = 'none';
+                }, 100);
+            } else if (pageName === 'riwayat') {
+                loadRiwayat();
+            } else if (pageName === 'visualisasi') {
+                loadChartData();
+            }
+            
+            // Initialize icons after page change
+            lucide.createIcons();
+        }
+        
+        // Initialize icons on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAuth()) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <script src="script.js"></script>
+    <script src="charts.js"></script>
+</body>
+</html>

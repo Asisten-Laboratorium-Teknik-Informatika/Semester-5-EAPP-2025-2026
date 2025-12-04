@@ -1,0 +1,4 @@
+eel==0.16.0
+mysql-connector-python==8.2.0
+
+

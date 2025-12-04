@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistem Parkir Modern</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i data-lucide="parking-circle" class="auth-logo-icon"></i>
+                </div>
+                <h1>SISTEM PARKIR</h1>
+                <p class="auth-subtitle">Masuk ke akun Anda</p>
+            </div>
+
+            <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();" class="auth-form">
+                <div class="form-group">
+                    <label for="username">
+                        <i data-lucide="user" class="label-icon"></i> Username atau Email
+                    </label>
+                    <input type="text" id="username" placeholder="Masukkan username atau email" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i data-lucide="lock" class="label-icon"></i> Password
+                    </label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="password" placeholder="Masukkan password" required autocomplete="current-password">
+                        <button type="button" class="btn-password-toggle" onclick="togglePassword()">
+                            <i data-lucide="eye" id="passwordToggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="loginError" class="error-message" style="display: none;"></div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                    <i data-lucide="log-in" class="btn-icon"></i> Masuk
+                </button>
+
+                <div class="auth-footer">
+                    <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize icons
+        lucide.createIcons();
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('passwordToggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        // Handle login
+        async function handleLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // Reset error
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+            
+            // Validate
+            if (!username || !password) {
+                errorDiv.textContent = 'Mohon lengkapi semua field!';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Disable button
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i data-lucide="loader-2" class="btn-icon"></i> Memproses...';
+            lucide.createIcons();
+            
+            try {
+                const result = await eel.login(username, password)();
+                
+                if (result.success) {
+                    // Simpan user data ke sessionStorage
+                    sessionStorage.setItem('user', JSON.stringify(result.user));
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    
+                    // Redirect ke halaman utama
+                    window.location.href = 'index.html';
+                } else {
+                    errorDiv.textContent = result.message || 'Login gagal!';
+                    errorDiv.style.display = 'block';
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i data-lucide="log-in" class="btn-icon"></i> Masuk';
+                    lucide.createIcons();
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = 'Terjadi kesalahan saat login!';
+                errorDiv.style.display = 'block';
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i data-lucide="log-in" class="btn-icon"></i> Masuk';
+                lucide.createIcons();
+            }
+        }
+
+        // Check if already logged in
+        window.onload = function() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            if (isLoggedIn === 'true') {
+                window.location.href = 'index.html';
+            }
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
+
