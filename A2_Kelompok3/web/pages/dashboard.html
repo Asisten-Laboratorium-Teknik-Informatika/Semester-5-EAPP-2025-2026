@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Room - KILAS Quiz</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Navbar -->
+    <link rel="stylesheet" href="../css/navbar.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <!-- BACKGROUND BLOBS -->
+    <div class="bg-shape shape-top"></div>
+    <div class="bg-shape shape-right"></div>
+
+    <!-- NAVBAR -->
+    <div id="navbar-placeholder"></div>
+
+    <div class="dashboard-container">
+
+        <!-- HEADER -->
+        <header class="dash-header">
+            <h1 class="dash-title">Dashboard Room</h1>
+            <p class="dash-subtitle">Kelola room dan buat soal sebelum memulai kuis.</p>
+        </header>
+
+        <div class="dash-grid">
+
+            <!-- LEFT -->
+            <main class="main-content">
+
+                <section class="card room-card">
+                    <div class="room-header">
+                        <div>
+                            <h2 class="room-name-large">Loading...</h2>
+                            <span class="host-label">Host: -</span>
+                        </div>
+
+                        <div class="room-code-display">
+                            <span class="code-text" id="roomCode">---</span>
+                            <button class="btn-icon-only" onclick="copyCode()" title="Salin Kode">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="room-stats-row">
+                        <div class="stat-item">
+                            <span class="stat-label">Mode Soal</span>
+                            <span class="stat-value mode-value">-</span>
+                        </div>
+
+                        <div class="stat-item">
+                            <span class="stat-label">Kelengkapan Soal</span>
+                            <span class="stat-value question-progress" style="color: var(--warning)">0 dari 0</span>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="stat-item">
+                            <span class="stat-label">Waktu Dibuat</span>
+                            <span class="stat-value time-created">-</span>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- ACTIONS -->
+                <section class="actions-section">
+                    <h3 class="section-title">Aksi Host</h3>
+
+                    <div class="actions-grid">
+
+                        <!-- Buat Soal -->
+                        <a href="create-questions.html?room=482913" class="action-card btn-create-q">
+                            <div class="action-icon"><i class="fa-solid fa-plus"></i></div>
+                            <div>
+                                <h3 class="action-title">Buat Pertanyaan</h3>
+                                <p class="action-desc">Tambahkan soal pilihan ganda atau benar/salah.</p>
+                            </div>
+                        </a>
+
+                        <button class="action-card btn-start-quiz ready"
+                            onclick="window.location.href='host-play.html'">
+                            <div class="action-icon"><i class="fa-solid fa-play"></i></div>
+                            <div>
+                                <h3 class="action-title">Mulai Kuis</h3>
+                                <p class="action-desc">Minimal harus ada satu</p>
+                            </div>
+                        </button>
+
+
+                    </div>
+                </section>
+
+            </main>
+
+            <aside class="sidebar">
+                <div class="card sidebar-card">
+                    <h4 class="stat-label" style="margin-bottom:12px;">Status Room</h4>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Menunggu Soal</span>
+                    </div>
+                </div>
+
+                <div class="tip-panel">
+                    <div class="tip-title"><i class="fa-regular fa-lightbulb"></i> Tips</div>
+                    <p class="tip-content">Simpan kode room agar mudah diberikan ke peserta.</p>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+    <script src="/eel.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/loadNavbar.js" defer></script>
+</body>
+
+</html>

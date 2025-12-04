@@ -1,0 +1,376 @@
+/* --- VARIABLES & RESET --- */
+:root {
+    --primary: #4f46e5; /* Indigo 600 */
+    --primary-light: #e0e7ff; /* Indigo 100 */
+    --primary-hover: #4338ca; /* Indigo 700 */
+    --secondary: #7c3aed; /* Violet 600 */
+    --accent: #ec4899; /* Pink 500 */
+    --success: #10b981; /* Emerald 500 */
+    --warning: #f59e0b; /* Amber 500 */
+    
+    --bg-body: #f8fafc; 
+    --bg-card: #ffffff;
+    
+    --text-main: #0f172a; 
+    --text-muted: #64748b; 
+    --text-light: #94a3b8;
+    
+    --border: #e2e8f0;
+    --radius-xl: 20px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-soft: 0 10px 30px rgba(79,70,229,0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: var(--bg-body);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- BACKGROUND SHAPES --- */
+.bg-shape {
+    position: absolute;
+    z-index: -1;
+    filter: blur(80px);
+    opacity: 0.5;
+}
+
+.shape-top {
+    top: -100px;
+    left: -100px;
+    width: 500px;
+    height: 500px;
+    background: rgba(79, 70, 229, 0.1);
+    border-radius: 50%;
+}
+
+.shape-right {
+    top: 200px;
+    right: -150px;
+    width: 400px;
+    height: 400px;
+    background: rgba(236, 72, 153, 0.1);
+    border-radius: 50%;
+}
+
+/* --- CONTAINER --- */
+.dashboard-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 100px 24px 60px;
+}
+
+/* --- HEADER --- */
+.dash-header {
+    margin-bottom: 40px;
+}
+
+.dash-title {
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dash-subtitle {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* --- GRID --- */
+.dash-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+}
+
+/* --- CARD GLOBAL --- */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: 0.3s ease;
+    overflow: hidden;
+}
+
+/* --- ROOM CARD --- */
+.room-card {
+    box-shadow: var(--shadow-soft);
+    border-top: 4px solid var(--primary);
+}
+
+.room-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.room-name-large {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.host-label {
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+.room-code-display {
+    background: var(--bg-body);
+    border: 2px dashed var(--primary);
+    border-radius: var(--radius-md);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.code-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+    font-family: monospace;
+}
+
+.btn-icon-only {
+    background: white;
+    border: 1px solid var(--border);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.btn-icon-only:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+/* --- Room Stats --- */
+.room-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    gap: 8px;
+}
+
+/* Progress bar */
+.progress-container {
+    height: 6px;
+    background: var(--bg-body);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--warning);
+    width: 0%;
+    transition: 0.5s;
+}
+
+/* --- ACTIONS SECTION --- */
+.actions-section {
+    margin-top: 32px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.action-card {
+    text-decoration: none;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.action-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-light);
+}
+
+.action-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+/* Create Question */
+.btn-create-q .action-icon {
+    background: #e0e7ff;
+    color: var(--primary);
+}
+
+/* Start Quiz */
+.btn-start-quiz {
+    background: var(--bg-body);
+    border: 1px dashed var(--border);
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-start-quiz.ready {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    color: white;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.btn-start-quiz.ready .action-icon {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+.action-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.action-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* --- SIDEBAR --- */
+.sidebar-card {
+    margin-bottom: 24px;
+}
+
+.stat-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-circle-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-text h4 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.stat-text span {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.tip-panel {
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    border-radius: var(--radius-md);
+    padding: 20px;
+}
+
+.tip-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #b45309;
+    margin-bottom: 8px;
+}
+
+.tip-content {
+    color: #b45309;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    .dash-grid {
+        grid-template-columns: 1fr;
+    }
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* FIX: Tombol mulai kuis bisa diklik */
+.btn-start-quiz.ready {
+    opacity: 1 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+/* FIX: Background blob tidak menutupi elemen klik */
+.actions-section,
+.action-card,
+.btn-start-quiz,
+.main-content {
+    position: relative;
+    z-index: 20;
+}

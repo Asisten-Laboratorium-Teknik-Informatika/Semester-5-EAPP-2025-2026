@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Berlangsung - KILAS Quiz</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/public-play.css">
+</head>
+
+<body>
+
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <div class="game-card">
+        
+        <header class="card-header">
+            <div class="badges-group">
+                <span class="badge">Soal 5 dari 10</span>
+                <span class="badge" style="background: #fff7ed; color: #ea580c;">Poin: 3450</span>
+            </div>
+            <div class="timer-float" id="timer">30</div>
+        </header>
+
+        <div class="question-area">
+            <h1 class="q-text">Apa nama ibu kota negara Indonesia yang baru di Kalimantan?</h1>
+        </div>
+
+        <div class="answers-grid" id="answersGrid">
+            <button class="answer-card opt-a" onclick="selectAnswer(this)">Jakarta</button>
+            <button class="answer-card opt-b" onclick="selectAnswer(this)">Nusantara</button>
+            <button class="answer-card opt-c" onclick="selectAnswer(this)">Balikpapan</button>
+            <button class="answer-card opt-d" onclick="selectAnswer(this)">Samarinda</button>
+        </div>
+
+        <div class="footer-status" id="footerStatus">
+            <div class="waiting-badge">
+                <span>Jawaban Terkirim, Menunggu Host</span>
+                <div style="display:flex; gap:4px; margin-left:4px;">
+                    <div class="dot-typing"></div>
+                    <div class="dot-typing"></div>
+                    <div class="dot-typing"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/eel.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/public-play.js"></script>
+</body>
+</html>

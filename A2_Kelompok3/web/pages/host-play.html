@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Host - KILAS</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/host-play.css">
+</head>
+<body>
+
+    <!-- Background Animation -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <div class="monitor-container glass-panel">
+
+        <header class="room-header">
+            <div class="room-info">
+                <h1 id="roomNameDisplay">Memuat Room...</h1>
+                <span class="room-code-badge">Kode: <span id="roomCodeDisplay">---</span></span>
+                <p class="host-name" id="hostNameDisplay"></p> <!-- Nama Host -->
+            </div>
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                Sedang Berlangsung
+            </div>
+        </header>
+
+        <section class="participants-section">
+            <div class="section-title">
+                <span><i class="fa-solid fa-users"></i> Peserta Bergabung</span>
+                <span class="p-count" id="participantCount">0</span>
+            </div>
+
+            <div class="participants-list" id="participantsList">
+                <div style="text-align: center; color: var(--text-muted); padding: 20px;">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> Menunggu data...
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer-action">
+            <button class="btn-end" onclick="endSession()">
+                <i class="fa-solid fa-stop-circle"></i> AKHIRI SESI
+            </button>
+        </footer>
+
+    </div>
+    <script src="/eel.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/host-play.js"></script>
+</body>
+</html>

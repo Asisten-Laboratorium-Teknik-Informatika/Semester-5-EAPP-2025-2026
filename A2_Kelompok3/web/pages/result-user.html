@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Kuis - KILAS Quiz</title>
+
+    <!-- Font: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS External -->
+    <link rel="stylesheet" href="../css/result-user.css">
+</head>
+<body>
+
+    <!-- BG BLOBS -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <!-- RESULT CARD -->
+    <div class="result-card">
+        
+        <!-- Trophy Icon -->
+        <div class="trophy-wrapper">
+            <i class="fa-solid fa-trophy trophy-icon"></i>
+        </div>
+
+        <!-- Title & Subtitle -->
+        <h1 class="result-title">Selamat! Kuis Selesai</h1>
+        <p class="result-subtitle">Kamu telah menyelesaikan semua soal. Berikut adalah ringkasan performamu.</p>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-box correct">
+                <span class="stat-val" id="answerCorrect">0/0</span>
+                <span class="stat-label">Benar</span>
+            </div>
+            <div class="stat-box points">
+                <span class="stat-val" id="answerPoints">0</span>
+                <span class="stat-label">Total Poin</span>
+            </div>
+            <div class="stat-box accuracy">
+                <span class="stat-val" id="answerAccuracy">0%</span>
+                <span class="stat-label">Akurasi</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions-wrapper">
+            <button class="btn btn-primary" onclick="window.location.href='../pages/join.html'">
+                <i class="fa-solid fa-gamepad"></i> Gabung Kuis Lain
+            </button>
+            <button class="btn btn-outline" onclick="window.location.href='../pages/index.html'">
+                <i class="fa-solid fa-house"></i> Kembali ke Menu
+            </button>
+        </div>
+
+    </div>
+
+    <script src="/eel.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/result-user.js"></script>
+</body>
+</html>
