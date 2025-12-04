@@ -4,335 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LAN Chat</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="/eel.js"></script>
 </head>
-<body class="bg-gray-100 h-screen flex flex-col font-sans overflow-hidden">
+<body class="dark">
 
     <!-- AUTH SCREEN -->
     <div id="auth-screen" class="auth-wrapper">
-        <div class="auth-card">
+        <div id="loginBox" class="auth-body">
+            <section id="loginSection" class="auth-container">
+                <h2>Login</h2>
+                <div id="loginForm">
+                    <label>Email</label>
+                    <input type="text" id="auth-user" placeholder="Enter your email" />
 
-            <!-- LOGIN -->
-            <section id="loginSection" class="auth-section">
-                <div class="auth-heading">
-                    <i class="fa-solid fa-signal icon"></i>
-                    <h2>Login</h2>
-                    <p>Join the local chat</p>
+                    <label>Password</label>
+                    <input type="password" id="auth-pass" placeholder="Enter your password" />
+
+                    <button onclick="doLogin()" class="btn-primary">Login</button>
                 </div>
-
-                <div id="auth-error" class="auth-error"></div>
-
-                <label>Username</label>
-                <input type="text" id="auth-user" placeholder="Enter your username">
-
-                <label>Password</label>
-                <input type="password" id="auth-pass" placeholder="Enter your password">
-
-                <button onclick="doLogin()" class="btn-main">Login</button>
 
                 <p class="auth-footer">
                     Don't have an account?
                     <a href="#" onclick="showRegister()">Register</a>
                 </p>
+                <div id="loginError" class="err"></div>
             </section>
 
-            <!-- REGISTER -->
-            <section id="registerSection" class="auth-section hidden">
-                <div class="auth-heading">
-                    <i class="fa-solid fa-user-plus icon"></i>
-                    <h2>Create Account</h2>
+            <section id="registerSection" class="auth-container" style="display:none;">
+                <h2>Create an Account</h2>
+                <div id="registerForm">
+                    <label>Username</label>
+                    <input type="text" id="auth-user" placeholder="Enter your username" />
+
+                    <label>Password</label>
+                    <input type="password" id="auth-pass" placeholder="Enter your password" />
+
+                    <button onclick="doRegister()" class="btn-primary">Register</button>
                 </div>
-
-                <label>Username</label>
-                <input type="text" id="auth-user" placeholder="Choose a username">
-
-                <label>Password</label>
-                <input type="password" id="auth-pass" placeholder="Choose a password">
-
-                <button onclick="doRegister()" class="btn-secondary">Register</button>
 
                 <p class="auth-footer">
                     Already have an account?
                     <a href="#" onclick="showLogin()">Login</a>
                 </p>
+                <div id="loginError" class="err"></div>
             </section>
-
         </div>
     </div>
 
     <!-- SETUP SCREEN -->
-    <div id="setup-screen" class="hidden flex-1 flex flex-col items-center justify-center p-6">
-        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm h-[500px] flex flex-col">
-            <div class="text-center mb-4">
-                <h1 class="text-xl font-bold text-gray-800">Hello, <span id="display-username" class="text-purple-600">User</span>!</h1>
+    <div id="setup-screen" class="screen hidden">
+        <div class="setup-card">
+
+            <div class="user-greeting" style="margin-bottom:20px;">
+                <h1>Hello, <span id="display-username" class="user-name">User</span>!</h1>
             </div>
 
-            <div class="flex bg-gray-100 p-1 rounded-lg mb-4 flex-shrink-0">
-                <button onclick="switchTab('host')" id="tab-host" class="flex-1 py-2 rounded-md bg-white shadow-sm text-sm font-bold">Create Group</button>
-                <button onclick="switchTab('join')" id="tab-join" class="flex-1 py-2 rounded-md text-gray-500 text-sm font-bold">Find Group</button>
+            <div class="tab-switch">
+                <button onclick="switchTab('host')" id="tab-host" class="tab active">Create Group</button>
+                <button onclick="switchTab('join')" id="tab-join" class="tab">Find Group</button>
             </div>
 
             <!-- HOST UI -->
-            <div id="host-section" class="flex-1 flex flex-col justify-center space-y-4">
-                <div class="text-center">
-                    <i class="fa-solid fa-tower-broadcast text-4xl text-purple-200 mb-4"></i>
-                    <p class="text-sm text-gray-500 mb-2">Name your chat group</p>
-                    <input type="text" id="group-name-input" class="w-full p-3 border rounded-lg focus:ring-2 ring-purple-500 outline-none text-center font-bold" placeholder="e.g. Study Group">
+            <div id="host-section" class="host-ui">
+                <div class="host-content">
+                    <i class="fa-solid fa-tower-broadcast icon-large"></i>
+                    <p class="subtitle">Name your chat group</p>
+                    <input type="text" id="group-name-input" class="input-center" placeholder="e.g. Study Group">
                 </div>
-                <button onclick="startHosting()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-bold hover:bg-purple-700 transition">
-                    Start Hosting
-                </button>
+                <button onclick="startHosting()" class="btn-main">Start Hosting</button>
             </div>
 
-            <!-- JOIN UI (Scanner) -->
-            <div id="join-section" class="hidden flex-1 flex flex-col h-full overflow-hidden">
-                <div class="flex items-center justify-between mb-2">
-                    <p class="text-xs font-bold text-gray-400 uppercase">Available Groups</p>
-                    <div class="flex items-center gap-1 text-purple-500 text-xs animate-pulse">
+            <!-- JOIN UI -->
+            <div id="join-section" class="join-ui hidden">
+                <div class="join-header">
+                    <p class="join-title">Available Groups</p>
+                    <div class="scan-active">
                         <i class="fa-solid fa-radar"></i> Scanning...
                     </div>
                 </div>
                 
-                <div id="group-list" class="flex-1 overflow-y-auto space-y-2 pr-1">
-                    <!-- Groups injected here -->
-                    <div id="no-groups-msg" class="text-center text-gray-400 text-sm mt-10">
+                <div id="group-list" class="group-list">
+                    <div id="no-groups-msg" class="no-items">
                         Searching for local groups...<br>
-                        <span class="text-xs opacity-50">(Make sure Host is on same WiFi)</span>
+                        <span class="hint">(Make sure Host is on same WiFi)</span>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- CHAT SCREEN (Same as before) -->
-    <div id="chat-screen" class="hidden flex-1 flex flex-col h-full">
-        <header class="bg-white shadow p-4 flex justify-between items-center z-10">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold">
-                    <i class="fa-solid fa-users"></i>
-                </div>
+    <!-- CHAT SCREEN -->
+    <div id="chat-screen" class="screen hidden">
+        <header class="chat-header">
+            <div class="header-left">
+                <div class="group-icon"><i class="fa-solid fa-users"></i></div>
                 <div>
-                    <h2 class="font-bold text-gray-800 text-sm" id="chat-title">Group Chat</h2>
-                    <p class="text-xs text-green-500 flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Live</p>
+                    <h2 id="chat-title" class="chat-name">Group Chat</h2>
+                    <p class="live-status"><span class="live-dot"></span> Live</p>
                 </div>
             </div>
-            <div>
-                <button onclick="location.href='./video_call.html'" class="text-gray-400 hover:text-gray-600">
+
+            <div class="header-right">
+                <button onclick="location.href='./video_call.html'" class="header-btn">
                     <i class="fa-solid fa-video"></i>
                 </button>
-                <button onclick="leaveChat()" class="text-red-400 hover:text-red-600">
+                <button onclick="leaveChat()" class="header-btn danger">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
         </header>
 
-        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50"></div>
+        <div id="messages" class="messages"></div>
 
-        <div class="bg-white p-3 border-t">
+        <div class="chat-input-box">
             <input type="file" id="file-input" class="hidden" onchange="handleFileSelect(this)">
-            <form onsubmit="sendMsg(event)" class="flex gap-2 items-center">
-                <button type="button" onclick="document.getElementById('file-input').click()" class="w-10 h-10 text-gray-400 hover:text-purple-500 rounded-full flex items-center justify-center hover:bg-gray-100 transition">
-                    <i class="fa-solid fa-paperclip text-lg"></i>
+            <form onsubmit="sendMsg(event)" class="chat-form">
+                <button type="button" onclick="document.getElementById('file-input').click()" class="icon-btn">
+                    <i class="fa-solid fa-paperclip"></i>
                 </button>
-                <input id="msg-input" type="text" class="flex-1 p-3 rounded-full border bg-gray-50 focus:bg-white focus:ring-2 ring-purple-500 outline-none" placeholder="Message..." autocomplete="off">
-                <button class="w-10 h-10 bg-purple-600 text-white rounded-full hover:bg-purple-700 shadow-lg flex items-center justify-center">
-                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                <input id="msg-input" type="text" class="msg-input" placeholder="Message..." autocomplete="off">
+                <button class="send-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </form>
         </div>
+
     </div>
 
-    <script>
-        function showLogin() {
-            document.getElementById("registerSection").style.display = "none";
-            document.getElementById("loginSection").style.display = "block";
-        }
-        function showRegister() {
-            document.getElementById("loginSection").style.display = "none";
-            document.getElementById("registerSection").style.display = "block";
-        }
-        let currentUser = "";
-
-        // --- AUTH ---
-        async function doLogin() {
-            const u = document.getElementById('auth-user').value.trim();
-            const p = document.getElementById('auth-pass').value.trim();
-            if(!u || !p) return;
-            const res = await eel.login_user(u, p)();
-            if (res === true) {
-                currentUser = u;
-                document.getElementById('display-username').innerText = u;
-                showSetup();
-            } else {
-                document.getElementById('auth-error').innerText = res;
-                document.getElementById('auth-error').classList.remove('hidden');
-            }
-        }
-
-        async function doRegister() {
-            const u = document.getElementById('auth-user').value.trim();
-            const p = document.getElementById('auth-pass').value.trim();
-            if(!u || !p) return;
-            const res = await eel.register_user(u, p)();
-            if (res === true) alert("Registered! Login now.");
-            else {
-                document.getElementById('auth-error').innerText = res;
-                document.getElementById('auth-error').classList.remove('hidden');
-            }
-        }
-
-        function showSetup() {
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('setup-screen').classList.remove('hidden');
-            document.getElementById('setup-screen').classList.add('flex');
-        }
-
-        // --- TABS & SCANNING ---
-        function switchTab(mode) {
-            document.getElementById('host-section').style.display = mode === 'host' ? 'flex' : 'none';
-            document.getElementById('join-section').style.display = mode === 'join' ? 'flex' : 'none';
-            document.getElementById('tab-host').classList.toggle('bg-white', mode === 'host');
-            document.getElementById('tab-join').classList.toggle('bg-white', mode === 'join');
-            
-            if (mode === 'join') {
-                // Clear old list and start scanning
-                document.getElementById('group-list').innerHTML = '<div id="no-groups-msg" class="text-center text-gray-400 text-sm mt-10">Searching...</div>';
-                eel.start_scanning(); 
-            }
-        }
-
-        // Called from Python when a host is found via UDP
-        eel.expose(ui_add_group);
-        function ui_add_group(name, hostUser, ip, port) {
-            // Remove "No groups" message if it exists
-            const noMsg = document.getElementById('no-groups-msg');
-            if(noMsg) noMsg.remove();
-
-            const list = document.getElementById('group-list');
-            
-            // Check if already exists (simple check)
-            if(document.getElementById(`btn-${ip}-${port}`)) return;
-
-            const html = `
-            <div id="btn-${ip}-${port}" class="bg-white border border-gray-200 p-3 rounded-lg shadow-sm hover:border-purple-500 cursor-pointer transition flex justify-between items-center group" onclick="connectToGroup('${ip}', '${port}', '${name}')">
-                <div>
-                    <h3 class="font-bold text-gray-800 group-hover:text-purple-600">${escapeHtml(name)}</h3>
-                    <p class="text-xs text-gray-400">Host: ${escapeHtml(hostUser)}</p>
-                </div>
-                <div class="bg-green-100 text-green-600 text-xs px-2 py-1 rounded font-bold">
-                    JOIN
-                </div>
-            </div>`;
-            
-            list.insertAdjacentHTML('beforeend', html);
-        }
-
-        async function startHosting() {
-            const groupName = document.getElementById('group-name-input').value.trim();
-            if (!groupName) return alert("Please enter a Group Name");
-
-            document.getElementById('chat-title').innerText = groupName;
-            const res = await eel.host_chat(groupName)();
-            
-            if (res === true) enterChat();
-            else alert("Error hosting: " + res);
-        }
-
-        async function connectToGroup(ip, port, name) {
-            document.getElementById('chat-title').innerText = name;
-            const res = await eel.join_chat(ip, port)();
-            if (res === true) enterChat();
-            else alert("Connection failed: " + res);
-        }
-
-        function enterChat() {
-            document.getElementById('setup-screen').classList.add('hidden');
-            document.getElementById('chat-screen').classList.remove('hidden');
-            document.getElementById('chat-screen').classList.add('flex');
-            addMessage("System", "text", "", "Joined the chat.");
-
-            window.currentGroupName = document.getElementById('chat-title').innerText;
-        }
-        
-        function leaveChat() {
-            location.reload();
-        }
-
-        // --- FILE & CHAT (Unchanged Logic) ---
-        function handleFileSelect(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                const reader = new FileReader();
-                if(file.size > 5 * 1024 * 1024) { alert("File too large"); return; }
-                reader.onload = function(e) {
-                    const base64Data = e.target.result;
-                    const type = file.type.startsWith('image/') ? 'image' : 'file';
-                    eel.send_data_py(type, file.name, base64Data, currentUser);
-                };
-                reader.readAsDataURL(file);
-            }
-            input.value = '';
-        }
-
-        eel.expose(js_receive_message);
-        function js_receive_message(sender, type, filename, content) {
-            addMessage(sender, type, filename, content);
-            if(sender !== currentUser && sender !== "System") {
-                eel.trigger_notification(sender, type === 'text' ? content : "Sent a file");
-            }
-        }
-
-        function sendMsg(e) {
-            e.preventDefault();
-            const input = document.getElementById('msg-input');
-            const text = input.value.trim();
-            if(!text) return;
-            eel.send_data_py("text", "", text, currentUser);
-            input.value = '';
-        }
-
-        function addMessage(sender, type, filename, content) {
-            const container = document.getElementById('messages');
-            const isMe = sender === currentUser;
-            const isSys = sender === "System";
-            let innerContent = "";
-
-            if (type === 'image') {
-                innerContent = `<p class="text-xs opacity-75 mb-1">${escapeHtml(filename)}</p><img src="${content}" class="img-preview" onclick="openImage(this.src)">`;
-            } else if (type === 'file') {
-                innerContent = `<div class="flex items-center gap-3 bg-gray-100 bg-opacity-20 p-2 rounded"><i class="fa-solid fa-file text-2xl"></i><div class="overflow-hidden"><p class="text-sm font-bold truncate">${escapeHtml(filename)}</p><a href="${content}" download="${filename}" class="text-xs underline hover:text-yellow-300">Download</a></div></div>`;
-            } else {
-                innerContent = `<p class="text-sm">${escapeHtml(content)}</p>`;
-            }
-
-            let html = "";
-            if (isSys) {
-                html = `<div class="text-center text-xs text-gray-400 my-2">- ${content} -</div>`;
-            } else if (isMe) {
-                html = `<div class="flex justify-end animate-fade-in"><div class="bg-purple-600 text-white max-w-[80%] p-3 rounded-2xl rounded-tr-none shadow text-sm">${innerContent}</div></div>`;
-            } else {
-                html = `<div class="flex justify-start animate-fade-in"><div class="bg-white text-gray-800 max-w-[80%] p-3 rounded-2xl rounded-tl-none shadow border border-gray-100"><p class="text-xs text-purple-500 font-bold mb-1">${escapeHtml(sender)}</p>${innerContent}</div></div>`;
-            }
-            container.insertAdjacentHTML('beforeend', html);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function openImage(src) {
-            const w = window.open("");
-            w.document.write('<img src="' + src + '" style="max-width:100%">');
-        }
-
-        function escapeHtml(text) {
-            if (!text) return "";
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-    </script>
-    <style>
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
-    </style>
+    <script src="./app.js"></script>
 </body>
 </html>
