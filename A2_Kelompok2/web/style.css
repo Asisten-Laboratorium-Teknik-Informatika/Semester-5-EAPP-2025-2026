@@ -1,0 +1,157 @@
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f3f7;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
+
+.img-preview { 
+    max-width: 100%; 
+    border-radius: 8px; 
+    margin-top: 5px; 
+    cursor: pointer; 
+}
+
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth-card {
+    background: #fff;
+    width: 350px;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 6px 25px rgba(0,0,0,.1);
+}
+
+.auth-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-section.hidden {
+    display: none;
+}
+
+.auth-heading {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-heading h2 {
+    margin: 8px 0 2px;
+    color: #333;
+}
+
+.auth-heading p {
+    font-size: 13px;
+    color: #777;
+}
+
+.icon {
+    font-size: 40px;
+    color: #8b5cf6;
+}
+
+label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+/* Better input styling */
+input {
+    width: 100%;
+    height: 50px;
+    font-size: 15px;
+    margin: 14px 16px;
+    margin-bottom: 18px;
+    border: none;
+    outline: none;
+    border-radius: 14px;
+    background: #f3f3f7;
+    color: #333;
+    transition: 0.2s ease;
+}
+
+/* placeholder nicer */
+input::placeholder {
+    color: #aaa;
+    font-weight: 500;
+}
+
+/* hover adds tiny lift */
+input:hover {
+    background: #eee;
+}
+
+/* focus = app-like glow */
+input:focus {
+    background: #fff;
+    border: 2px solid #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.25);
+}
+
+.btn-main, .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+/* Login button */
+.btn-main {
+    background: #8b5cf6;
+    color: white;
+}
+
+.btn-main:hover {
+    background: #7a4ded;
+}
+
+/* Register button */
+.btn-secondary {
+    background: #3a3a3a;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #222;
+}
+
+.auth-footer {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+}
+
+.auth-footer a {
+    color: #8b5cf6;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.auth-error {
+    display: none;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 12px;
+    padding: 8px;
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 10px;
+}
