@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby Room - KILAS Quiz</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+
+    <link rel="stylesheet" href="../css/lobby.css">
+</head>
+
+<body>
+
+    <div class="bg-shape shape-indigo"></div>
+    <div class="bg-shape shape-pink"></div>
+
+    <div id="navbar-placeholder"></div>
+
+    <div class="lobby-wrapper">
+        <div class="lobby-card">
+
+            <div class="card-header">
+                <div class="header-icon">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                </div>
+                <h1 class="header-title">Menunggu Host Memulai</h1>
+                <p class="header-subtitle">Anda telah bergabung ke room. Silakan tunggu host untuk memulai kuis.</p>
+            </div>
+
+            <div class="room-info-panel">
+                <div class="info-row">
+                    <span class="info-label">Kode Room</span>
+                    <span class="code-display" id="roomCode">482913</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nama Room</span>
+                    <span class="info-value">Sejarah Kebudayaan</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Host</span>
+                    <span class="info-value">Pak Budi Santoso</span>
+                </div>
+                <div class="info-row" style="margin-top:4px; padding-top:8px; border-top:1px dashed var(--border);">
+                    <span class="info-label"><i class="fa-solid fa-layer-group"></i> 10 Soal</span>
+                    <span class="info-label"><i class="fa-solid fa-shuffle"></i> Acak</span>
+                </div>
+            </div>
+
+            <div class="participants-section">
+                <div class="section-header">
+                    <span class="section-title">Peserta Bergabung</span>
+                    <span class="participant-count" id="pCount">1</span>
+                </div>
+                <div class="participants-list" id="pList">
+                    <div class="p-item">
+                        <div class="p-avatar" style="background:#4f46e5;">A</div>
+                        <span class="p-name">Anda (Peserta)</span>
+                        <span class="p-status"><i class="fa-solid fa-circle-check"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-footer">
+                <div class="loading-container">
+                    <div class="dot-pulse"></div>
+                    <div class="dot-pulse"></div>
+                    <div class="dot-pulse"></div>
+                    <span class="loading-text" id="statusText">Menunggu Host...</span>
+                </div>
+
+                <button class="btn-exit" onclick="confirmExit()">
+                    <i class="fa-solid fa-door-open"></i> Keluar Room
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <script src="/eel.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/lobby.js"></script>
+    <script src="../js/loadNavbar.js" defer></script>
+
+</body>
+
+</html>

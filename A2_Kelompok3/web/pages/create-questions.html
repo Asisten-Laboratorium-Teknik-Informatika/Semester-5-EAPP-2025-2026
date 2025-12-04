@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Soal - KILAS Quiz</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/navbar.css">
+
+    <link rel="stylesheet" href="../css/create-question.css">
+</head>
+
+<body>
+
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <div id="navbar-placeholder"></div>
+
+    <div class="page-container">
+
+        <header class="room-header">
+            <div class="room-info">
+                <h2>Kuis Sejarah Kebudayaan</h2>
+                <div class="room-meta">
+                    <span><i class="fa-regular fa-hashtag"></i> Kode: <span class="badge-code">482913</span></span>
+                    <span><i class="fa-solid fa-shuffle"></i> Mode: Acak</span>
+                </div>
+            </div>
+            <a id="btnBackDashboard" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+
+        </header>
+
+        <div class="content-grid">
+
+            <div id="formCard" class="form-card">
+                <div class="form-section-title" id="formTitle">
+                    <i class="fa-solid fa-plus-circle"></i> Tambah Soal Baru
+                </div>
+
+                <form id="questionForm">
+                    <input type="hidden" id="qId">
+
+                    <div class="form-group">
+                        <label class="label">Pertanyaan</label>
+                        <textarea id="qText" class="input-textarea" placeholder="Tulis pertanyaan di sini..."
+                            required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="label">Tipe Soal</label>
+                            <select id="qType" class="select-input" onchange="renderAnswers()">
+                                <option value="pg">Pilihan Ganda (Single Choice)</option>
+                                <option value="cb">Checkbox (Multiple Choice)</option>
+                                <option value="tf">Benar / Salah</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Bobot Poin</label>
+                            <input type="number" id="qScore" class="input-field" value="10" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Pilihan Jawaban <span
+                                style="font-weight:400; font-size:12px; color:var(--text-muted)">(Tandai jawaban
+                                benar)</span></label>
+                        <div id="answerSection" class="answers-container"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" id="btnCancel" onclick="resetForm()">
+                            <i class="fa-solid fa-xmark"></i> Batal Edit
+                        </button>
+                        <button type="button" class="btn btn-outline" id="btnReset" onclick="resetForm()">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="btnSubmit">
+                            <i class="fa-solid fa-plus"></i> Tambah Soal
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="list-section">
+                <div class="list-header">
+                    <span class="list-title">Daftar Soal</span>
+                    <span class="count-badge" id="listCountBadge">0 Soal</span>
+                </div>
+
+                <div id="questionsList" class="questions-list">
+                    <div class="empty-state" id="emptyState">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <p>Belum ada soal dibuat.<br>Silakan isi form di atas.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="/eel.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/create-questions.js"></script>
+    <script src="../js/loadNavbar.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buat Room - KILAS Quiz</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Navbar CSS -->
+    <link rel="stylesheet" href="../css/navbar.css">
+
+    <!-- Host Page CSS -->
+    <link rel="stylesheet" href="../css/host.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div id="navbar-placeholder"></div>
+
+    <main class="host-main">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+
+        <div class="host-container">
+
+
+            <div class="host-card">
+                <div class="page-header">
+                    <h1 class="page-title">Buat Room Kuis Baru</h1>
+                    <p class="page-subtitle">Atur detail informasi room untuk memulai sesi kuis interaktif dengan
+                        peserta Anda.</p>
+                </div>
+
+                <form id="createRoomForm" onsubmit="handleCreateRoom(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nama Room</label>
+                        <input type="text" class="form-input" id="roomName" placeholder="Contoh: Kuis Sejarah Kelas XII"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nama Host (Anda)</label>
+                        <input type="text" class="form-input" id="hostName" placeholder="Contoh: Samuel Bonardy"  required>
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Mode Soal</label>
+                            <select class="form-select" id="mode">
+                                <option value="ordered">Berurutan</option>
+                                <option value="random">Acak (Random)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Jumlah Soal</label>
+                            <input type="number" class="form-input" id="totalQuestions" placeholder="10" min="1"
+                                max="50" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-rocket"></i> Buat Room Sekarang
+                    </button>
+                </form>
+            </div>
+
+            <div class="host-visuals">
+                <div class="visual-panel">
+                    <h3 class="visual-title">Tips Membuat Room</h3>
+                    <p class="visual-desc">Ikuti tips berikut agar sesi kuis Anda berjalan lancar.</p>
+
+                    <ul class="visual-list">
+                        <li><i class="fa-solid fa-check-circle"></i> Gunakan nama room yang jelas</li>
+                        <li><i class="fa-solid fa-check-circle"></i> Tentukan jumlah soal sesuai durasi</li>
+                        <li><i class="fa-solid fa-check-circle"></i> Mode acak cocok untuk kuis cepat</li>
+                    </ul>
+                </div>
+
+                <div class="visual-panel">
+                    <h3 class="visual-title">Info Penting</h3>
+                    <p class="visual-desc">
+                        Setelah room dibuat, Anda bisa langsung membuat soal dan membagikan kode room kepada peserta.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <script src="/eel.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/host.js"></script>
+    <script src="../js/loadNavbar.js" defer></script>
+
+</body>
+
+</html>
