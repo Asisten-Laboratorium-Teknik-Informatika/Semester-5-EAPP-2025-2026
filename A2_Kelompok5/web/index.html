@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Inventory Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body>
+
+    <div id="auth-view" class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <i class="fas fa-cube fa-3x"></i>
+                <h1>Inventory AI</h1>
+                <p>Silakan masuk untuk melanjutkan</p>
+            </div>
+
+            <form id="login-form">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="login-user" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-pass" placeholder="Password" required>
+                </div>
+                <button type="submit" class="auth-btn">MASUK</button>
+                <p class="switch-text">Belum punya akun? <a href="#" onclick="showRegister()">Daftar disini</a></p>
+            </form>
+
+            <form id="register-form" style="display: none;">
+                <div class="input-group">
+                    <i class="fas fa-user-plus"></i>
+                    <input type="text" id="reg-user" placeholder="Username Baru" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="reg-pass" placeholder="Password Baru" required>
+                </div>
+                <button type="submit" class="auth-btn btn-register">DAFTAR SEKARANG</button>
+                <p class="switch-text">Sudah punya akun? <a href="#" onclick="showLogin()">Login disini</a></p>
+            </form>
+
+            <div id="auth-msg"></div>
+        </div>
+    </div>
+
+    <div id="dashboard-view" class="app-wrapper" style="display: none;">
+        
+        <main class="dashboard">
+            <header>
+                <div class="header-left">
+                    <button onclick="loadData()" class="refresh-btn" title="Muat Ulang Data">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <div class="titles">
+                        <h1>Inventory AI</h1>
+                        <p>Dashboard Admin</p>
+                    </div>
+                </div>
+                
+                <div style="display:flex; gap:10px">
+                    <button onclick="toggleGuide()" class="guide-btn">
+                        <i class="fas fa-book"></i> Panduan
+                    </button>
+                    <button onclick="logout()" class="guide-btn" style="background:#ffebee; color:#c62828; border-color:#ef9a9a;">
+                        <i class="fas fa-sign-out-alt"></i> Keluar
+                    </button>
+                </div>
+            </header>
+
+            <div class="stats-container">
+                <div class="card"><i class="fas fa-boxes"></i><div><h3>Total Stok</h3><span id="stat-stock">0</span></div></div>
+                <div class="card"><i class="fas fa-shopping-cart"></i><div><h3>Terjual</h3><span id="stat-sales">0</span></div></div>
+                <div class="card"><i class="fas fa-wallet"></i><div><h3>Aset</h3><span id="stat-asset">Rp 0</span></div></div>
+            </div>
+
+            <div class="chart-wrapper"><canvas id="stockChart"></canvas></div>
+
+            <div id="filter-container" class="filter-area"></div>
+
+            <div class="grid-container">
+                <div id="product-grid" class="product-grid"></div>
+            </div>
+        </main>
+
+        <aside class="ai-chat">
+           <div class="chat-header">
+                <div class="avatar"><i class="fas fa-robot"></i></div>
+                <div class="meta"><h3>Gemini Agent</h3><span class="status">Online</span></div>
+            </div>
+            <div class="chat-body" id="chat-box">
+                <div class="msg ai">
+                    Halo! Saya Admin AI Anda.<br>
+                    <button onclick="triggerAnalysis()" class="chip-btn"><i class="fas fa-magic"></i> Cek Analisis Stok</button>
+                </div>
+            </div>
+            <div id="upload-preview" style="display:none; padding:10px; background:#eee;"></div>
+            <div class="chat-input">
+                <input type="file" id="file-input" style="display:none" onchange="handleFileSelect()">
+                <button onclick="document.getElementById('file-input').click()" class="btn-icon"><i class="fas fa-camera"></i></button>
+                <input type="text" id="user-input" placeholder="Ketik perintah...">
+                <button onclick="sendMessage()" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </aside>
+    </div>
+
+    <div id="guide-modal" class="modal">
+        <div class="modal-content">
+            <span onclick="toggleGuide()" class="close">&times;</span>
+            <h2>Panduan</h2>
+            </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
