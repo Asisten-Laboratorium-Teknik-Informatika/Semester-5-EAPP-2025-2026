@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Kelola Kategori</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/eel.js"></script>
+    <style>
+        .cat-list-item {
+            background: white; padding: 15px; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .cat-list-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Recipe.ID</h2>
+        <div class="menu-item" onclick="window.location.href='index.html'">Dashboard</div>
+        <div class="menu-item" onclick="window.location.href='recipes.html'">Resep Saya</div>
+        <div class="menu-item" onclick="window.location.href='add.html'">Tambah Resep</div>
+        <div class="menu-item" onclick="window.location.href='planner.html'">Rencana Masak</div>
+        <div class="menu-item active">Kelola Kategori</div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header"><h1>🏷️ Kelola Kategori</h1></div>
+
+        <div class="card" style="padding: 20px; display: flex; gap: 10px; margin-bottom: 20px;">
+            <input type="text" id="newCat" placeholder="Nama Kategori Baru..." style="flex:1;">
+            <button class="btn btn-primary" style="margin-top:0; width:auto;" onclick="tambah()">+ Tambah</button>
+        </div>
+
+        <div class="card" id="list-box" style="padding: 0; overflow: hidden;">
+            <p style="padding:20px;">Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        async function load() {
+            let data = await eel.ambil_kategori()();
+            let html = '';
+            data.forEach(c => {
+                html += `
+                <div class="cat-list-item">
+                    <span><b>${c.name}</b></span>
+                    <button class="btn" style="background:#c0392b; font-size:12px; padding:5px 10px;" onclick="hapus(${c.id})">Hapus</button>
+                </div>`;
+            });
+            document.getElementById('list-box').innerHTML = html;
+        }
+
+        async function tambah() {
+            let nama = document.getElementById('newCat').value;
+            if(!nama) return alert("Isi nama kategori!");
+            let res = await eel.tambah_kategori_baru(nama)();
+            alert(res.pesan);
+            if(res.sukses) {
+                document.getElementById('newCat').value = "";
+                load();
+            }
+        }
+
+        async function hapus(id) {
+            if(confirm("Hapus kategori ini?")) {
+                let res = await eel.hapus_kategori(id)();
+                alert(res.pesan);
+                load();
+            }
+        }
+        load();
+    </script>
+</body>
+</html>
