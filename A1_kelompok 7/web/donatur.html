@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tambah Donatur - Sistem Donasi</title>
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/donatur.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <h1>SISTEM DONASI</h1>
+          <p>Manage Donations Efficiently</p>
+        </div>
+        <div class="nav-actions">
+          <button onclick="goHome()" class="btn btn-outline">Dashboard</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <div class="card donatur-container">
+          <!-- Header Section -->
+          <div class="page-header">
+            <h4>Donatur</h4>
+            <h1>Tambah Donatur Baru</h1>
+          </div>
+
+          <!-- Stats Overview -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="totalDonors">0</div>
+              <div class="stat-label">Total Donatur</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalDonations">Rp 0</div>
+              <div class="stat-label">Total Donasi</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="activeProjects">0</div>
+              <div class="stat-label">Penerima Aktif</div>
+            </div>
+          </div>
+
+          <!-- Form Section -->
+          <div class="form-section">
+            <div class="grid-container">
+              <!-- Form Inputs -->
+              <div class="form-column">
+                <div class="form-group">
+                  <label for="donor_name">Nama Donatur *</label>
+                  <input type="text" id="donor_name" class="form-control" placeholder="Masukkan nama lengkap donatur" />
+                </div>
+
+                <div class="form-group">
+                  <label for="donor_contact">Kontak Donatur</label>
+                  <input type="text" id="donor_contact" class="form-control" placeholder="Email atau nomor telepon (opsional)" />
+                </div>
+
+                <div class="form-group">
+                  <label for="donor_amount">Jumlah Donasi (Rp) *</label>
+                  <input type="number" id="donor_amount" class="form-control" placeholder="Masukkan jumlah donasi" />
+                </div>
+              </div>
+
+              <!-- Info Panel -->
+              <div class="info-column">
+                <div class="info-panel">
+                  <h3>Informasi Penting</h3>
+                  <p>• Pastikan data donatur diisi dengan benar</p>
+                  <p>• Nomor kontak digunakan untuk konfirmasi</p>
+                  <p>• Jumlah donasi akan tercatat secara otomatis</p>
+                  <p>• Data dapat diedit melalui menu laporan</p>
+                  <p>• Donatur akan tercatat dalam sistem secara permanen</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+              <button type="button" onclick="history.back()" class="btn btn-secondary">Kembali</button>
+              <button id="btnSaveDonatur" class="btn btn-primary">Simpan Donatur</button>
+            </div>
+
+            <!-- Quote Section -->
+            <div class="quote-section">
+              <p class="quote-text">Jangan takut miskin dengan bersedekah, karena Tuhan akan menggantinya berkali lipat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="/eel.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

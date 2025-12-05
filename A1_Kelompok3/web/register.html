@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SmartPay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 to-slate-100">
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="w-full max-w-md mt-5">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-slate-900">SmartPay</h1>
+                <p class="text-slate-600 text-sm mt-1">Buat akun baru Anda</p>
+            </div>
+
+            <!-- Register Form -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <form id="registerForm">
+                    <div class="mb-5">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
+                        <input type="text" required
+                            class="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-500 outline-none transition"
+                            placeholder="Yazid Ganteng">
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+                        <input type="email" required
+                            class="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-500 outline-none transition"
+                            placeholder="email@email.com">
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nomor Telepon</label>
+                        <input type="tel" required
+                            class="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-500 outline-none transition"
+                            placeholder="+628123211">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+                        <input type="password" required
+                            class="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-blue-500 outline-none transition"
+                            placeholder="••••••••">
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Daftar</button>
+                </form>
+
+                <div class="mt-6 pt-6 border-t border-slate-200">
+                    <p class="text-center text-slate-600 text-sm">Sudah punya akun? <a href="login.html"
+                            class="text-blue-600 font-semibold hover:text-blue-700">Masuk di sini</a></p>
+                </div>
+            </div>
+
+            <p class="text-center text-slate-600 text-xs mt-6"><a href="index.html"
+                    class="text-blue-600 hover:text-blue-700">Kembali ke beranda</a></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            let fullname = document.querySelector("#registerForm input[placeholder='Yazid Ganteng']").value;
+            let email = document.querySelector("#registerForm input[type='email']").value;
+            let phone = document.querySelector("#registerForm input[type='tel']").value;
+            let password = document.querySelector("#registerForm input[type='password']").value;
+
+            let result = await eel.register_user(fullname, email, phone, password)();
+
+            if (result === "success") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pendaftaran Akun Berhasil',
+                    text: 'Selamat datang!',
+                    heightAuto: false
+                }).then(() => {
+                    window.location.href = "login.html";
+                });
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pendaftaran Gagal',
+                    text: 'Email sudah digunakan atau terjadi kesalahan system!',
+                    heightAuto: false
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>

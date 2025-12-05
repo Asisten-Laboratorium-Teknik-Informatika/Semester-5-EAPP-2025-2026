@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f3f4f6;
+        margin: 0;
+        padding: 0;
+      }
+
+      .guest-container {
+        max-width: 400px;
+        margin: 60px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 25px;
+      }
+
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 6px;
+      }
+
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 13px;
+        margin-top: 4px;
+      }
+
+      .mt-4 {
+        margin-top: 16px;
+      }
+      .mt-2 {
+        margin-top: 8px;
+      }
+
+      .flex {
+        display: flex;
+      }
+      .justify-between {
+        justify-content: space-between;
+      }
+      .items-center {
+        align-items: center;
+      }
+
+      .btn-primary {
+        background: #4f46e5;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .btn-primary:hover {
+        background: #4338ca;
+      }
+
+      .link-forgot,
+      .link-register {
+        font-size: 14px;
+        color: #4b5563;
+        text-decoration: none;
+      }
+
+      .link-forgot:hover,
+      .link-register:hover {
+        text-decoration: underline;
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="guest-container">
+      <h2>Login</h2>
+      <form onsubmit="loginUser(event)">
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="email" name="email" required autofocus autocomplete="username" />
+          <div class="error-message"></div>
+        </div>
+
+        <div class="mt-4">
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" required autocomplete="current-password" />
+          <div class="error-message"></div>
+        </div>
+
+        <div class="checkbox-container">
+          <input id="remember_me" type="checkbox" name="remember" />
+          <label for="remember_me">Remember me</label>
+        </div>
+
+        <div class="mt-4 flex justify-between items-center">
+          <a class="link-forgot" href="reset-password.html">Forgot your password?</a>
+        </div>
+
+        <div class="mt-4 flex justify-between items-center">
+          <a href="register.html" class="link-register">Create an account</a>
+
+          <button type="submit" class="btn-primary">Log in</button>
+        </div>
+      </form>
+    </div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+  </body>
+</html>

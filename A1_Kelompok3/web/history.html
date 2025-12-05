@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Transaksi - SmartPay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div
+                    class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold">SP</span>
+                </div>
+                <span class="text-lg font-bold text-slate-900">SmartPay</span>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <a href="#" onclick="navigate('dashboard.html')"
+                    class="text-slate-600 hover:text-slate-900 transition">Beranda</a>
+                <a href="#" onclick="navigate('products.html')"
+                    class="text-slate-600 hover:text-slate-900 transition">Top-Up</a>
+                <a href="#" onclick="navigate('history.html')" class="text-slate-600  font-semibold">Riwayat</a>
+                <button onclick="logout()" class="text-slate-600 hover:text-slate-900 transition">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-bold">Riwayat Transaksi</h1>
+            <select id="filterStatus" class="px-4 py-2 border-2 rounded-lg">
+                <option value="">Semua Status</option>
+                <option value="success">Berhasil</option>
+                <option value="pending">Pending</option>
+                <option value="failed">Gagal</option>
+            </select>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-slate-50 border-b">
+                    <tr>
+                        <th class="px-6 py-4 text-left">E-Wallet</th>
+                        <th class="px-6 py-4 text-left">Nomor Tujuan</th>
+                        <th class="px-6 py-4 text-left">Nominal</th>
+                        <th class="px-6 py-4 text-left">Tanggal</th>
+                        <th class="px-6 py-4 text-left">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script>
+        function navigate(page) {
+            window.location.href = page;
+        }
+
+        function logout() {
+            localStorage.clear();
+            navigate('index.html');
+        }
+
+        function viewInvoice(transactionId) {
+            window.location.href = `invoice.html?id=${transactionId}`;
+        }
+
+        async function loadTransactions(filter = '') {
+            const email = localStorage.getItem("email");
+
+            if (!email) {
+                navigate("index.html");
+                return;
+            }
+
+            const transactions = await eel.get_transactions_by_user(email)();
+
+            const filtered = filter ? transactions.filter(t => t.status === filter) : transactions;
+
+            const table = document.getElementById('transactionTable');
+
+            table.innerHTML = filtered.map(t => `
+                <tr class="border-b cursor-pointer hover:bg-slate-50" onclick="viewInvoice(${t.id})">
+                    <td class="px-6 py-4">${t.product}</td>
+                    <td class="px-6 py-4">${t.account_number}</td>
+                    <td class="px-6 py-4">Rp ${t.amount.toLocaleString('id-ID')}</td>
+                    <td class="px-6 py-4">${t.created_at}</td>
+                    <td class="px-6 py-4">${t.status}</td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('filterStatus').addEventListener('change', (e) => {
+            loadTransactions(e.target.value);
+        });
+
+        window.onload = () => loadTransactions();
+    </script>
+
+
+</body>
+
+</html>

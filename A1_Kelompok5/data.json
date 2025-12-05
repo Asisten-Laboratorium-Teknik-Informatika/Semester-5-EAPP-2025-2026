@@ -1,0 +1,84 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "project_id": 1,
+      "title": "Desain UI Dashboard",
+      "description": "Membuat tampilan utama dashboard proyek",
+      "status": "done",
+      "deadline": "2025-11-12T13:43",
+      "start_time": "",
+      "end_time": ""
+    },
+    {
+      "id": 2,
+      "project_id": 2,
+      "title": "sxad",
+      "description": "adada",
+      "status": "done",
+      "deadline": "2025-12-20",
+      "start_time": "2025-10-25T14:35:04.781Z",
+      "end_time": "2025-10-25T14:35:07.231Z"
+    },
+    {
+      "id": 3,
+      "project_id": 2,
+      "title": "dada",
+      "description": "HLDJAL",
+      "status": "done",
+      "deadline": "2025-11-23",
+      "start_time": "2025-10-25T14:35:44.081Z",
+      "end_time": "2025-10-25T14:35:45.961Z"
+    },
+    {
+      "id": 4,
+      "project_id": 1,
+      "title": "iajdja",
+      "description": "dadad",
+      "status": "done",
+      "deadline": "2025-12-20",
+      "start_time": "2025-10-25T15:10:23.386Z",
+      "end_time": "2025-10-25T15:10:25.571Z"
+    },
+    {
+      "id": 5,
+      "project_id": 3,
+      "title": "eedw",
+      "description": "weqeq",
+      "status": "done",
+      "deadline": "2025-12-23",
+      "start_time": "2025-10-25T15:01:27.867Z",
+      "end_time": "2025-10-25T15:01:29.965Z"
+    },
+    {
+      "id": 6,
+      "project_id": 1,
+      "title": "dsds",
+      "description": "",
+      "status": "Done",
+      "deadline": "",
+      "start_time": "2025-10-25T22:16:31.276790",
+      "end_time": "2025-10-25T22:16:33.711437"
+    },
+    {
+      "id": 7,
+      "project_id": 1,
+      "title": "sfsf",
+      "description": "sda",
+      "status": "done",
+      "deadline": "2025-12-20",
+      "start_time": "2025-10-25T16:11:10.896Z",
+      "end_time": "2025-10-25T16:11:13.081Z"
+    },
+    {
+      "id": 8,
+      "project_id": 4,
+      "title": "figma",
+      "description": "dnajkk",
+      "status": "done",
+      "deadline": "2025-11-25",
+      "start_time": "2025-11-04T04:46:27.211Z",
+      "end_time": "2025-11-04T04:46:32.728Z"
+    }
+  ]
+}

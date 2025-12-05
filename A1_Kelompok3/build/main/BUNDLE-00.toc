@@ -1,0 +1,3 @@
+([('main',
+   '/Users/andreew/Project/project-eapp-lab/A1_Kelompok3/dist/main',
+   'EXECUTABLE')],)
