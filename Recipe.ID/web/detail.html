@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Masak</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="/eel.js"></script>
+    
+    <style>
+        /* --- STYLE UMUM --- */
+        .porsi-ctrl { background: #ddd; border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-weight: bold; }
+        .porsi-ctrl:hover { background: #bbb; }
+        .fav-btn-active { color: red !important; }
+        .cat-badge { background: #e67e22; color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-right: 5px; display: inline-block; margin-bottom: 2px; }
+
+        /* --- STYLE OVERLAY --- */
+        #exit-cooking-btn { position: fixed; top: 20px; right: 20px; z-index: 999; display: none; background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        
+        #timer-overlay {
+            position: fixed; bottom: 20px; right: 20px; background: #2c3e50; color: white;
+            padding: 15px 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none; z-index: 1000; animation: slideUp 0.3s;
+        }
+        @keyframes slideUp { from {transform: translateY(100px);} to {transform: translateY(0);} }
+
+        #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 8px; background: #2c3e50; z-index: 1000; display: none; }
+        #progress-fill { height: 100%; background: #27ae60; width: 0%; transition: width 0.3s ease; }
+
+        .step-check { width: 30px; height: 30px; border: 2px solid #ddd; border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; margin-left: 15px; transition: 0.3s; color: white; font-weight: bold; }
+        #reset-check-btn { display: none; }
+
+        /* --- MODE MASAK RULES --- */
+        body.mode-masak .step-check { display: flex; }
+        body.mode-masak #progress-container { display: block; }
+        body.mode-masak #reset-check-btn { display: block; }
+        
+        /* Tombol print dll disembunyikan saat mode masak */
+        body.mode-masak .detail-header .btn { display: none; }
+        
+        body.mode-masak .step-item.active-step { border: 2px solid #e67e22; background: #fff8e1; transform: scale(1.02); color: #2c3e50; }
+        body.mode-masak .step-item.active-step .step-check { border-color: #e67e22; color: transparent; }
+        body.mode-masak .step-item.completed { opacity: 0.6; background: #f0f0f0; color: #2c3e50; }
+        body.mode-masak .step-item.completed .step-check { background: #27ae60; border-color: #27ae60; color: white; }
+        body.mode-masak .step-item.locked { opacity: 0.5; pointer-events: none; }
+        body.mode-masak .step-item.locked .step-check { background: #eee; border-color: #ccc; cursor: not-allowed; }
+
+        /* --- PRINT PDF --- */
+        body.sedang-print .btn, body.sedang-print .porsi-ctrl, body.sedang-print #fav-btn, body.sedang-print .step-check { display: none !important; }
+        body.sedang-print .main-content { padding: 0; background: white; }
+        body.sedang-print #banner-box { height: 250px; margin-bottom: 10px; }
+        body.sedang-print { background: white; }
+    </style>
+</head>
+<body>
+    <div id="progress-container"><div id="progress-fill"></div></div>
+    <button id="exit-cooking-btn" onclick="toggleCookingMode()">❌ Keluar Mode Masak</button>
+
+    <div id="timer-overlay">
+        <div style="font-size:12px; color:#aaa; margin-bottom:5px;">COOKING TIMER</div>
+        <div id="timer-display" style="font-size:32px; font-weight:bold; font-family:monospace; letter-spacing: 2px;">00:00:00</div>
+        <div style="margin-top:10px; text-align:right;">
+            <button onclick="stopTimer()" style="background:#e74c3c; border:none; color:white; padding:5px 15px; cursor:pointer; border-radius:3px; font-weight:bold;">STOP</button>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h2>Recipe.ID</h2>
+        <div class="menu-item" onclick="window.location.href='index.html'">Dashboard</div>
+        <div class="menu-item active" onclick="window.location.href='recipes.html'">Resep Saya</div>
+        <div class="menu-item" onclick="window.location.href='add.html'">Tambah Resep</div>
+        <div class="menu-item" onclick="window.location.href='planner.html'">Rencana Masak</div>
+        <div class="menu-item" onclick="window.location.href='categories.html'">Kelola Kategori</div>
+    </div>
+    
+    <div class="main-content" id="main-area">
+        <div id="banner-box" style="width:100%; height:350px; overflow:hidden; border-radius:10px; margin-bottom:20px; display:none;">
+            <img id="banner" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+
+        <div class="detail-header">
+            <div style="display: flex; align-items: start; gap: 15px;">
+                <button id="fav-btn" onclick="toggleFav()" style="background:none; border:none; font-size:28px; cursor:pointer; color:#ccc; margin-top:5px;">♥</button>
+                <div>
+                    <h1 id="title">Loading...</h1>
+                    <div id="cat-container" style="margin-top: 5px;"><span class="badge">-</span></div>
+                </div>
+            </div>
+            
+            <div style="display:flex; gap:10px;">
+                <button class="btn" style="background:#3498db;" onclick="simpanPDF()">📄 PDF</button>
+                <button class="btn" style="background:#27ae60;" onclick="toggleCookingMode()">📺 Masak</button>
+                <button class="btn" style="background:#f39c12;" onclick="edit()">✏️ Edit</button>
+                <button class="btn" style="background:#c0392b;" onclick="hapus()">🗑️ Hapus</button>
+            </div>
+        </div>
+        
+        <div style="color:#777; margin-bottom:20px; display:flex; flex-wrap:wrap; align-items:center; gap:20px;" id="meta">
+            <div style="background:#eee; padding:5px 15px; border-radius:20px; display:flex; align-items:center; gap:10px;">
+                <span>Kalkulator Porsi:</span>
+                <button class="porsi-ctrl" onclick="ubahPorsi(-1)">-</button>
+                <b id="disp-porsi" style="font-size:16px;">1</b>
+                <button class="porsi-ctrl" onclick="ubahPorsi(1)">+</button>
+            </div>
+        </div>
+        
+        <p id="desc" style="margin-bottom:30px; font-style:italic; line-height: 1.6;">-</p>
+        
+        <div class="cooking-view">
+            <div class="ingredients-panel">
+                <h3>🛒 Bahan-bahan</h3><br>
+                <div id="ing-list"></div>
+            </div>
+            <div class="steps-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h3>🔥 Cara Membuat</h3>
+                    <button id="reset-check-btn" class="btn btn-small" style="background:#95a5a6;" onclick="resetLangkah()">Reset Checklist ↺</button>
+                </div>
+                <div id="step-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const id = new URLSearchParams(window.location.search).get('id');
+        let resepAsli = null; 
+        let porsiSekarang = 0;
+        let isFav = false;
+        let timerInterval = null;
+        let currentStepIndex = 0; 
+
+        function simpanPDF() {
+            document.body.classList.add('sedang-print');
+            const element = document.getElementById('main-area');
+            const opt = {
+                margin:       10,
+                filename:     `Resep-${resepAsli.title}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.body.classList.remove('sedang-print');
+            });
+        }
+
+        async function load() {
+            let r = await eel.ambil_detail_resep(id)();
+            if(!r) { alert("Resep tidak ditemukan!"); window.location.href = 'recipes.html'; return; }
+            resepAsli = r;
+            porsiSekarang = r.servings;
+            isFav = r.is_favorite === 1;
+            renderData();
+        }
+
+        function renderData() {
+            document.getElementById('title').innerText = resepAsli.title;
+            document.getElementById('desc').innerText = resepAsli.description;
+            document.getElementById('disp-porsi').innerText = porsiSekarang;
+
+            let catHtml = '';
+            if(resepAsli.categories && resepAsli.categories.length > 0) resepAsli.categories.forEach(c => catHtml += `<span class="cat-badge">${c.name}</span>`);
+            else catHtml = '<span class="badge" style="background:#95a5a6;">Tanpa Kategori</span>';
+            document.getElementById('cat-container').innerHTML = catHtml;
+
+            if(resepAsli.image_path) {
+                document.getElementById('banner').src = resepAsli.image_path;
+                document.getElementById('banner-box').style.display = 'block';
+            }
+
+            const btnFav = document.getElementById('fav-btn');
+            if(isFav) { btnFav.classList.add('fav-btn-active'); btnFav.innerText = "❤️"; } 
+            else { btnFav.classList.remove('fav-btn-active'); btnFav.innerText = "🤍"; }
+
+            let rasio = porsiSekarang / resepAsli.servings;
+            let h1 = '';
+            resepAsli.bahan.forEach(b => {
+                let unitTampil = b.unit ? b.unit : '';
+                let jumlahTampil = b.quantity;
+                try {
+                    let angkaAsli = eval(b.quantity);
+                    if (!isNaN(angkaAsli)) { jumlahTampil = parseFloat((angkaAsli * rasio).toFixed(2)); }
+                } catch(e) { jumlahTampil = b.quantity; }
+                
+                h1 += `<div style="margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                        <b>${jumlahTampil} ${unitTampil}</b> ${b.item_name}
+                       </div>`;
+            });
+            document.getElementById('ing-list').innerHTML = h1;
+
+            let h2 = '';
+            let totalSteps = resepAsli.langkah.length;
+
+            resepAsli.langkah.forEach((s, index) => {
+                let statusClass = "locked"; 
+                let iconCheck = ""; 
+                
+                if (index < currentStepIndex) {
+                    statusClass = "completed";
+                    iconCheck = "✓";
+                } else if (index === currentStepIndex) {
+                    statusClass = "active-step";
+                }
+
+                let text = s.instruction;
+                let btnTimer = '';
+                let detikTotal = 0;
+
+                // --- PERBAIKAN REGEX TIMER DI SINI ---
+                
+                // 1. JAM: Hanya deteksi 'jam', 'hours' (Hapus 'h' single)
+                let jamMatch = text.match(/(\d+)\s*(jam|hours?)\b/i);
+                if (jamMatch) detikTotal += parseInt(jamMatch[1]) * 3600;
+
+                // 2. MENIT: Hanya deteksi 'menit', 'mnt' (Hapus 'm' single)
+                let mntMatch = text.match(/(\d+)\s*(menit|mnt)\b/i);
+                if (mntMatch) detikTotal += parseInt(mntMatch[1]) * 60;
+
+                // 3. DETIK: Hanya deteksi 'detik', 'dtk', 'sec' (Hapus 's' single)
+                let dtkMatch = text.match(/(\d+)\s*(detik|dtk|sec)\b/i);
+                if (dtkMatch) detikTotal += parseInt(dtkMatch[1]);
+
+                if (detikTotal > 0) {
+                    let labelTime = detikTotal >= 3600 ? (detikTotal/3600).toFixed(1)+"j" : (detikTotal/60).toFixed(0)+"m";
+                    btnTimer = `<button onclick="startTimer(${detikTotal})" 
+                                style="margin-left:10px; background:#34495e; color:white; border:none; padding:4px 10px; border-radius:15px; cursor:pointer; font-size:12px;">
+                                ⏱️ ${labelTime}
+                                </button>`;
+                }
+
+                h2 += `<div class="step-item ${statusClass}" id="step-${index}">
+                        <div class="step-num">${s.step_number}</div>
+                        <div style="flex:1; line-height:1.5;">${s.instruction}</div>
+                        ${btnTimer}
+                        <div class="step-check" onclick="selesaikanLangkah(${index})">${iconCheck}</div>
+                       </div>`;
+            });
+            document.getElementById('step-list').innerHTML = h2;
+            
+            let persentase = (currentStepIndex / totalSteps) * 100;
+            document.getElementById('progress-fill').style.width = persentase + "%";
+        }
+
+        function selesaikanLangkah(index) {
+            if (index === currentStepIndex) {
+                currentStepIndex++; 
+                renderData();
+                if(currentStepIndex >= resepAsli.langkah.length) {
+                    setTimeout(() => alert("🎉 SELAMAT! Masakan selesai."), 300);
+                }
+            }
+        }
+
+        function resetLangkah() {
+            if(confirm("Ulangi langkah membuat dari awal?")) {
+                currentStepIndex = 0;
+                renderData();
+            }
+        }
+
+        function startTimer(totalDetik) {
+            clearInterval(timerInterval);
+            document.getElementById('timer-overlay').style.display = 'block';
+            updateDisplay(totalDetik);
+            timerInterval = setInterval(() => {
+                totalDetik--;
+                updateDisplay(totalDetik);
+                if(totalDetik <= 0) {
+                    clearInterval(timerInterval);
+                    alert("WAKTU HABIS! ⏰🔥");
+                    document.getElementById('timer-overlay').style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function updateDisplay(detik) {
+            let h = Math.floor(detik / 3600);
+            let m = Math.floor((detik % 3600) / 60);
+            let s = detik % 60;
+            document.getElementById('timer-display').innerText = `${h > 0 ? h.toString().padStart(2,'0') + ':' : ''}${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
+
+        function stopTimer() { clearInterval(timerInterval); document.getElementById('timer-overlay').style.display = 'none'; }
+        function ubahPorsi(delta) { let baru = porsiSekarang + delta; if (baru < 1) return; porsiSekarang = baru; renderData(); }
+        function toggleCookingMode() { document.body.classList.toggle('mode-masak'); }
+        async function toggleFav() { isFav = !isFav; renderData(); await eel.toggle_favorite(id, isFav)(); }
+        function edit() { window.location.href = 'edit.html?id=' + id; }
+        async function hapus() { if(confirm("Hapus resep ini?")) { let res = await eel.hapus_resep(id)(); if(res.sukses) window.location.href = 'recipes.html'; } }
+
+        load();
+    </script>
+</body>
+</html>
