@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Tambah Resep</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/eel.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Recipe.ID</h2>
+        <div class="menu-item" onclick="window.location.href='index.html'">Dashboard</div>
+        <div class="menu-item" onclick="window.location.href='recipes.html'">Resep Saya</div>
+        <div class="menu-item active">Tambah Resep</div>
+        <div class="menu-item" onclick="window.location.href='planner.html'">Rencana Masak</div>
+        <div class="menu-item" onclick="window.location.href='categories.html'">Kelola Kategori</div>
+    </div>
+    <div class="main-content">
+        <div class="form-card">
+            <h2 style="color:#e67e22; margin-bottom: 5px;">Buat Resep Baru</h2>
+            <p style="color:#95a5a6; margin-bottom: 30px;">Bagikan rahasia dapurmu di sini.</p>
+
+            <div class="top-form-grid">
+                <div class="form-group">
+                    <label>Foto Masakan</label>
+                    <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+                        <img id="preview">
+                        <div id="info-upload">
+                            <div class="upload-icon">📷</div>
+                            <div class="upload-text">Klik untuk upload foto</div>
+                        </div>
+                        <input type="file" id="fileInput" accept="image/*" onchange="bacaGambar(this)" style="display:none;">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label>Judul Resep</label>
+                        <input type="text" id="judul" class="modern-input" placeholder="Contoh: Nasi Goreng Spesial...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <div id="kat-container" class="cat-container">
+                            Loading...
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Deskripsi Singkat</label>
+                        <textarea id="desc" class="modern-textarea" rows="3" placeholder="Ceritakan sedikit tentang masakan ini..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">🛒 Bahan-bahan</div>
+            <div id="box-bahan"></div>
+            <button class="btn-add-dashed" onclick="addBahan()">+ Tambah Baris Bahan</button>
+
+            <div class="section-title">🔥 Langkah Membuat</div>
+            <div id="box-langkah"></div>
+            <button class="btn-add-dashed" onclick="addLangkah()">+ Tambah Langkah</button>
+
+            <div class="action-buttons">
+                <a href="recipes.html" class="btn-cancel">Batal</a>
+                <button class="btn-save" onclick="simpan()">SIMPAN RESEP</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi bacaGambar ada di script.js
+        
+        let stepCounter = 0; // Counter untuk penomoran langkah
+
+        // Override sedikit fungsi bacaGambar agar teks "Klik Upload" hilang saat ada gambar
+        const originalBacaGambar = window.bacaGambar;
+        window.bacaGambar = function(input) {
+            originalBacaGambar(input);
+            const infoUpload = document.getElementById('info-upload');
+            if (infoUpload) infoUpload.style.display = 'none';
+        }
+
+        async function init() {
+            let k = await eel.ambil_kategori()();
+            let html = '';
+            k.forEach(x => {
+                html += `<label class="cat-option">
+                            <input type="checkbox" class="chk-kat" value="${x.id}">
+                            <span>${x.name}</span>
+                         </label>`;
+            });
+            document.getElementById('kat-container').innerHTML = html;
+            addBahan(); addBahan(); 
+            addLangkah();
+        }
+
+        async function simpan() {
+            let katIds = [];
+            document.querySelectorAll('.chk-kat:checked').forEach(el => katIds.push(el.value));
+            if (katIds.length === 0) return alert("Pilih minimal satu kategori!");
+            if (!document.getElementById('judul').value) return alert("Judul wajib diisi!");
+
+            let data = {
+                judul: document.getElementById('judul').value,
+                deskripsi: document.getElementById('desc').value,
+                kategori_ids: katIds,
+                file_base64: fileBase64, nama_file: fileName,
+                bahan: [], langkah: []
+            };
+            
+            document.querySelectorAll('.nm').forEach((el, i) => {
+                if(el.value) data.bahan.push({
+                    nama: el.value, 
+                    jumlah: document.querySelectorAll('.jml')[i].value, 
+                    satuan: document.querySelectorAll('.sat')[i].value
+                });
+            });
+            document.querySelectorAll('.st').forEach(el => { if(el.value) data.langkah.push(el.value); });
+
+            let res = await eel.simpan_resep_baru(data)();
+            alert(res.pesan);
+            if(res.sukses) window.location.href='recipes.html';
+        }
+
+        function addBahan() {
+            document.getElementById('box-bahan').insertAdjacentHTML('beforeend', `
+                <div class="list-item-row">
+                    <input class="nm modern-input" placeholder="Nama Bahan (ex: Telur)" style="flex:3">
+                    <input class="jml modern-input" placeholder="Jml" style="flex:1">
+                    <input class="sat modern-input" placeholder="Satuan" style="flex:1">
+                    <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
+                </div>`);
+        }
+        
+        // Fungsi baru untuk menghitung ulang dan memperbaiki penomoran
+        function recountSteps() {
+            let steps = document.querySelectorAll('#box-langkah .list-item-row');
+            steps.forEach((step, index) => {
+                let numberSpan = step.querySelector('.step-num-display');
+                if (numberSpan) {
+                    numberSpan.innerText = index + 1;
+                }
+            });
+            // Reset stepCounter berdasarkan jumlah elemen yang tersisa
+            stepCounter = steps.length;
+        }
+
+        // Fungsi baru untuk menghapus langkah dan memicu penghitungan ulang
+        function removeLangkah(element) {
+            element.remove();
+            recountSteps();
+        }
+
+        function addLangkah(v="") {
+            stepCounter++; // Naikkan counter setiap kali dipanggil
+            document.getElementById('box-langkah').insertAdjacentHTML('beforeend', `
+                <div class="list-item-row" style="align-items:flex-start">
+                    <span class="step-num-display" style="background:#e67e22; color:white; width:25px; height:25px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:12px; margin-top:10px; min-width: 25px;">${stepCounter}</span>
+                    <textarea class="st modern-textarea" rows="2" placeholder="Jelaskan langkah ini..." style="flex:1;">${v}</textarea>
+                    <button class="btn-del" style="margin-top:5px;" onclick="removeLangkah(this.parentElement)">✕</button>
+                </div>`);
+            recountSteps(); // Panggil recount untuk memastikan penomoran tetap benar
+        }
+        
+        init();
+    </script>
+</body>
+</html>
