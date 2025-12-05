@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Rencana Mingguan</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/eel.js"></script>
+</head>
+<body>
+    <div id="modal-resep" class="modal-overlay">
+        <div class="modal-box">
+            <h3 id="modal-title">Pilih Resep untuk Senin - Sarapan</h3>
+            <input type="text" id="cari-modal" placeholder="Cari..." style="width:100%; padding:10px; margin-top:10px;" onkeyup="filterModal()">
+            <div id="modal-list" class="modal-list">Loading...</div>
+            <button class="btn btn-small" onclick="tutupModal()" style="margin-top:10px; background:#aaa;">Batal</button>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h2>Recipe.ID</h2>
+        <div class="menu-item" onclick="window.location.href='index.html'">Dashboard</div>
+        <div class="menu-item" onclick="window.location.href='recipes.html'">Resep Saya</div>
+        <div class="menu-item" onclick="window.location.href='add.html'">Tambah Resep</div>
+        <div class="menu-item active">Rencana Masak</div> <div class="menu-item" onclick="window.location.href='categories.html'">Kelola Kategori</div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header"><h1>📅 Rencana Masak Mingguan</h1></div>
+        <p style="color:#666;">Klik slot kosong untuk menambahkan menu.</p>
+
+        <div class="planner-grid" id="grid-planner">
+            </div>
+    </div>
+
+    <script>
+        const hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        const tipe = ['Sarapan', 'Siang', 'Malam'];
+        
+        let allRecipes = [];
+        let selectedDay = null;
+        let selectedType = null;
+
+        async function load() {
+            // 1. Render Struktur Tabel Kosong Dulu
+            let html = '';
+            hari.forEach(h => {
+                html += `<div class="day-column">
+                            <div class="day-header">${h}</div>`;
+                
+                tipe.forEach(t => {
+                    // ID unik untuk setiap slot: misal "slot-Senin-Sarapan"
+                    html += `<div class="meal-slot" id="slot-${h}-${t}">
+                                <div class="meal-slot-label">${t}</div>
+                                <button class="btn-add-plan" onclick="bukaModal('${h}', '${t}')">+</button>
+                             </div>`;
+                });
+                html += `</div>`;
+            });
+            document.getElementById('grid-planner').innerHTML = html;
+
+            // 2. Ambil Data Rencana dari DB
+            let plans = await eel.ambil_rencana_mingguan()();
+            
+            // 3. Isi Slot yang ada datanya
+            for (const [dayName, dayData] of Object.entries(plans)) {
+                for (const [mealType, planData] of Object.entries(dayData)) {
+                    if (planData) {
+                        renderSlot(dayName, mealType, planData);
+                    }
+                }
+            }
+
+            // 4. Load semua resep untuk modal (sekali saja)
+            allRecipes = await eel.ambil_semua_resep()();
+        }
+
+        function renderSlot(day, type, data) {
+            let container = document.getElementById(`slot-${day}-${type}`);
+            let img = data.image_path ? data.image_path : "https://via.placeholder.com/100?text=🍳";
+            
+            container.innerHTML = `
+                <div class="meal-slot-label">${type}</div>
+                <div class="planned-card" onclick="window.location.href='detail.html?id=${data.recipe_id}'">
+                    <img src="${img}" class="planned-img">
+                    <div class="planned-title">${data.title}</div>
+                </div>
+                <button style="border:none; background:none; color:red; font-size:10px; cursor:pointer; margin-top:5px;" onclick="hapusPlan(event, ${data.plan_id})">Hapus</button>
+            `;
+        }
+
+        // --- MODAL LOGIC ---
+        function bukaModal(day, type) {
+            selectedDay = day;
+            selectedType = type;
+            document.getElementById('modal-title').innerText = `Pilih Menu: ${day} (${type})`;
+            document.getElementById('modal-resep').style.display = 'flex';
+            renderModalList(allRecipes);
+        }
+
+        function tutupModal() {
+            document.getElementById('modal-resep').style.display = 'none';
+        }
+
+        function renderModalList(data) {
+            let html = '';
+            data.forEach(r => {
+                html += `<div class="modal-item" onclick="pilihResep(${r.id})">
+                            <b>${r.title}</b>
+                         </div>`;
+            });
+            document.getElementById('modal-list').innerHTML = html;
+        }
+
+        function filterModal() {
+            let key = document.getElementById('cari-modal').value.toLowerCase();
+            let filtered = allRecipes.filter(r => r.title.toLowerCase().includes(key));
+            renderModalList(filtered);
+        }
+
+        async function pilihResep(id) {
+            let res = await eel.simpan_rencana(id, selectedDay, selectedType)();
+            if(res.sukses) {
+                tutupModal();
+                load(); // Reload untuk update tampilan
+            }
+        }
+
+        async function hapusPlan(e, id) {
+            e.stopPropagation(); // Biar gak kebuka detail resep
+            if(confirm("Hapus rencana ini?")) {
+                await eel.hapus_rencana(id)();
+                load();
+            }
+        }
+
+        load();
+    </script>
+</body>
+</html>

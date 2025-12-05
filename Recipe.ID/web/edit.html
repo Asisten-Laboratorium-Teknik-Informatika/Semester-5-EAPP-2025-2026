@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Resep</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/eel.js"></script>
+    <script src="script.js"></script> 
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Recipe.ID</h2>
+        <div class="menu-item" onclick="window.location.href='index.html'">Dashboard</div>
+        <div class="menu-item" onclick="window.location.href='recipes.html'">Resep Saya</div>
+        <div class="menu-item" onclick="window.location.href='add.html'">Tambah Resep</div>
+        <div class="menu-item" onclick="window.location.href='planner.html'">Rencana Masak</div>
+        <div class="menu-item" onclick="window.location.href='categories.html'">Kelola Kategori</div>
+    </div>
+    
+    <div class="main-content">
+        <div class="form-card">
+            <h2 style="color:#e67e22;">Edit Resep</h2>
+            <p style="color:#95a5a6; margin-bottom: 30px;">Perbarui informasinya agar makin sempurna.</p>
+            
+            <input type="hidden" id="rid">
+            
+            <div class="top-form-grid">
+                <div class="form-group">
+                    <label>Ganti Foto</label>
+                    <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+                        <img id="preview">
+                        <div id="info-upload">
+                            <div class="upload-icon">📷</div>
+                            <div class="upload-text">Klik untuk ganti foto</div>
+                        </div>
+                        <input type="file" id="fileInput" accept="image/*" onchange="bacaGambar(this)" style="display:none;">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" id="judul" class="modern-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <div id="kat-container" class="cat-container">
+                            Loading...
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea id="desc" class="modern-textarea" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">🛒 Bahan-bahan</div>
+            <div id="box-bahan"></div>
+            <button class="btn-add-dashed" onclick="addBahan()">+ Tambah Baris Bahan</button>
+
+            <div class="section-title">🔥 Langkah Membuat</div>
+            <div id="box-langkah"></div>
+            <button class="btn-add-dashed" onclick="addLangkah()">+ Tambah Langkah</button>
+
+            <div class="action-buttons">
+                <button class="btn-cancel" onclick="goBack()">Batal</button>
+                <button class="btn-save" onclick="update()">SIMPAN PERUBAHAN</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let stepCounter = 0; // Counter untuk penomoran langkah
+
+        // Override bacaGambar untuk UI baru
+        const originalBacaGambar = window.bacaGambar;
+        window.bacaGambar = function(input) {
+            originalBacaGambar(input);
+            const infoUpload = document.getElementById('info-upload');
+            if (infoUpload) infoUpload.style.display = 'none';
+        }
+
+        function goBack() {
+             const id = document.getElementById('rid').value;
+             window.location.href = 'detail.html?id=' + id;
+        }
+
+        function addBahan(n="", j="", s="") {
+            document.getElementById('box-bahan').insertAdjacentHTML('beforeend', `
+                <div class="list-item-row">
+                    <input class="nm modern-input" value="${n}" placeholder="Nama" style="flex:3">
+                    <input class="jml modern-input" value="${j}" placeholder="Jml" style="flex:1">
+                    <input class="sat modern-input" value="${s}" placeholder="Sat" style="flex:1">
+                    <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
+                </div>`);
+        }
+
+        // Fungsi untuk menghitung ulang dan memperbaiki penomoran langkah
+        function recountSteps() {
+            let steps = document.querySelectorAll('#box-langkah .list-item-row');
+            steps.forEach((step, index) => {
+                let numberSpan = step.querySelector('.step-num-display');
+                if (numberSpan) {
+                    numberSpan.innerText = index + 1;
+                }
+            });
+            stepCounter = steps.length;
+        }
+
+        // Fungsi untuk menghapus langkah dan memicu penghitungan ulang
+        function removeLangkah(element) {
+            element.remove();
+            recountSteps();
+        }
+
+        function addLangkah(v="") {
+            stepCounter++; // Naikkan counter setiap kali dipanggil
+            document.getElementById('box-langkah').insertAdjacentHTML('beforeend', `
+                <div class="list-item-row" style="align-items:flex-start">
+                    <span class="step-num-display" style="background:#e67e22; color:white; width:25px; height:25px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:12px; margin-top:10px; min-width: 25px;">${stepCounter}</span>
+                    <textarea class="st modern-textarea" rows="2" placeholder="Instruksi..." style="flex:1;">${v}</textarea>
+                    <button class="btn-del" style="margin-top:5px;" onclick="removeLangkah(this.parentElement)">✕</button>
+                </div>`);
+            recountSteps();
+        }
+
+        async function load() {
+            // Load Kategori Checkbox
+            let k = await eel.ambil_kategori()();
+            let html = '';
+            k.forEach(x => {
+                html += `<label class="cat-option">
+                            <input type="checkbox" class="chk-kat" value="${x.id}">
+                            <span>${x.name}</span>
+                         </label>`;
+            });
+            document.getElementById('kat-container').innerHTML = html;
+
+            // Load Data Resep
+            const id = new URLSearchParams(window.location.search).get('id');
+            document.getElementById('rid').value = id;
+            let r = await eel.ambil_detail_resep(id)();
+            
+            document.getElementById('judul').value = r.title;
+            document.getElementById('desc').value = r.description;
+            
+            if (r.categories) {
+                r.categories.forEach(cat => {
+                    let chk = document.querySelector(`.chk-kat[value="${cat.id}"]`);
+                    if(chk) chk.checked = true;
+                });
+            }
+            if(r.image_path) {
+                document.getElementById('preview').src = r.image_path;
+                document.getElementById('preview').style.display = 'block';
+                document.getElementById('info-upload').style.display = 'none';
+            }
+            r.bahan.forEach(b => addBahan(b.item_name, b.quantity, b.unit));
+            r.langkah.forEach(s => addLangkah(s.instruction));
+            
+            // Panggil recountSteps untuk memastikan penomoran benar setelah loading data lama
+            recountSteps(); 
+        }
+
+        async function update() {
+            let katIds = [];
+            document.querySelectorAll('.chk-kat:checked').forEach(el => katIds.push(el.value));
+            if (katIds.length === 0) return alert("Pilih minimal satu kategori!");
+
+            let data = {
+                judul: document.getElementById('judul').value,
+                deskripsi: document.getElementById('desc').value,
+                kategori_ids: katIds,
+                file_base64: fileBase64, nama_file: fileName,
+                bahan: [], langkah: []
+            };
+            
+            document.querySelectorAll('.nm').forEach((el, i) => {
+                if(el.value) data.bahan.push({nama: el.value, jumlah: document.querySelectorAll('.jml')[i].value, satuan: document.querySelectorAll('.sat')[i].value});
+            });
+            document.querySelectorAll('.st').forEach(el => { if(el.value) data.langkah.push(el.value); });
+            
+            let res = await eel.update_resep_lama(document.getElementById('rid').value, data)();
+            alert(res.pesan);
+            if(res.sukses) window.location.href = 'detail.html?id=' + document.getElementById('rid').value;
+        }
+        load();
+    </script>
+</body>
+</html>
