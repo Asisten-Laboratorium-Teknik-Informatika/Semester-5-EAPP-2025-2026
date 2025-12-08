@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAN Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body class="dark">
+
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="auth-wrapper">
+        <div id="loginBox" class="auth-body">
+            <section id="loginSection" class="auth-container">
+                <h2>Login</h2>
+                <div id="loginForm">
+                    <label>Email</label>
+                    <input type="text" id="auth-user" placeholder="Enter your email" />
+
+                    <label>Password</label>
+                    <input type="password" id="auth-pass" placeholder="Enter your password" />
+
+                    <button onclick="doLogin()" class="btn-primary">Login</button>
+                </div>
+
+                <p class="auth-footer">
+                    Don't have an account?
+                    <a href="#" onclick="showRegister()">Register</a>
+                </p>
+                <div id="loginError" class="err"></div>
+            </section>
+
+            <section id="registerSection" class="auth-container" style="display:none;">
+                <h2>Create an Account</h2>
+                <div id="registerForm">
+                    <label>Username</label>
+                    <input type="text" id="auth-user" placeholder="Enter your username" />
+
+                    <label>Password</label>
+                    <input type="password" id="auth-pass" placeholder="Enter your password" />
+
+                    <button onclick="doRegister()" class="btn-primary">Register</button>
+                </div>
+
+                <p class="auth-footer">
+                    Already have an account?
+                    <a href="#" onclick="showLogin()">Login</a>
+                </p>
+                <div id="loginError" class="err"></div>
+            </section>
+        </div>
+    </div>
+
+    <!-- SETUP SCREEN -->
+    <div id="setup-screen" class="screen hidden">
+        <div class="setup-card">
+
+            <div class="user-greeting" style="margin-bottom:20px;">
+                <h1>Hello, <span id="display-username" class="user-name">User</span>!</h1>
+            </div>
+
+            <div class="tab-switch">
+                <button onclick="switchTab('host')" id="tab-host" class="tab active">Create Group</button>
+                <button onclick="switchTab('join')" id="tab-join" class="tab">Find Group</button>
+            </div>
+
+            <!-- HOST UI -->
+            <div id="host-section" class="host-ui">
+                <div class="host-content">
+                    <i class="fa-solid fa-tower-broadcast icon-large"></i>
+                    <p class="subtitle">Name your chat group</p>
+                    <input type="text" id="group-name-input" class="input-center" placeholder="e.g. Study Group">
+                </div>
+                <button onclick="startHosting()" class="btn-main">Start Hosting</button>
+            </div>
+
+            <!-- JOIN UI -->
+            <div id="join-section" class="join-ui hidden">
+                <div class="join-header">
+                    <p class="join-title">Available Groups</p>
+                    <div class="scan-active">
+                        <i class="fa-solid fa-radar"></i> Scanning...
+                    </div>
+                </div>
+                
+                <div id="group-list" class="group-list">
+                    <div id="no-groups-msg" class="no-items">
+                        Searching for local groups...<br>
+                        <span class="hint">(Make sure Host is on same WiFi)</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CHAT SCREEN -->
+    <div id="chat-screen" class="screen hidden">
+        <header class="chat-header">
+            <div class="header-left">
+                <div class="group-icon"><i class="fa-solid fa-users"></i></div>
+                <div>
+                    <h2 id="chat-title" class="chat-name">Group Chat</h2>
+                    <p class="live-status"><span class="live-dot"></span> Live</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button onclick="location.href='./video_call.html'" class="header-btn">
+                    <i class="fa-solid fa-video"></i>
+                </button>
+                <button onclick="leaveChat()" class="header-btn danger">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <div id="messages" class="messages"></div>
+
+        <div class="chat-input-box">
+            <input type="file" id="file-input" class="hidden" onchange="handleFileSelect(this)">
+            <form onsubmit="sendMsg(event)" class="chat-form">
+                <button type="button" onclick="document.getElementById('file-input').click()" class="icon-btn">
+                    <i class="fa-solid fa-paperclip"></i>
+                </button>
+                <input id="msg-input" type="text" class="msg-input" placeholder="Message..." autocomplete="off">
+                <button class="send-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <script src="./app.js"></script>
+</body>
+</html>
