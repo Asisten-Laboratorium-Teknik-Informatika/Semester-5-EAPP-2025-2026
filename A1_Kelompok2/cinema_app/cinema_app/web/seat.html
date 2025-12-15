@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pemilihan Kursi - BoMov</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="text/javascript" src="/eel.js"></script>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="navbar-container">
+        <nav class="navbar">
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="booking.html">Booking</a></li>
+            <li><a href="tikets.html">Tikets</a></li>
+            <li><a href="login.html">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Screen -->
+      <div class="screen-section">
+        <div class="screen">LAYAR</div>
+      </div>
+
+      <!-- AUTO GENERATED SEATS -->
+      <div id="seatsContainer" class="seat-selection"></div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-seat available"></div>
+          <span>Tersedia</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-seat selected"></div>
+          <span>Dipilih</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-seat booked"></div>
+          <span>Telah di booking</span>
+        </div>
+      </div>
+
+      <!-- Selected Seats & Payment -->
+      <div class="info-section">
+        <div class="selected-info">
+          <div class="seat-display">
+            <label>Seat</label>
+            <div id="selectedSeatsDisplay" class="selected-seats-display">-</div>
+          </div>
+          <div class="payment-info">
+            <div class="payment-row">
+              <span>Total Pembayaran</span>
+              <span id="totalPrice" class="total-price">RP 0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button -->
+      <div class="button-container">
+        <button id="confirmBtn" class="btn btn-primary" onclick="confirmBooking()">Pesan Sekarang</button>
+      </div>
+    </main>
+
+    <script src="js/seat.js"></script>
+  </body>
+</html>

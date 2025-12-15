@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nikmati Film Terbaru - Bioskop Online</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/eel.js" defer></script>
+    <script src="js/home.js" defer></script>
+  </head>
+  <body class="home-page">
+    <!-- Header kecil -->
+    <header class="home-header"></header>
+    <!-- NAVBAR (already styled in your CSS) -->
+    <nav class="navbar">
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="booking.html">Booking</a></li>
+        <li><a href="tikets.html">Tikets</a></li>
+        <li><a href="login.html">Logout</a></li>
+      </ul>
+    </nav>
+    <!-- HERO -->
+    <main>
+      <section class="hero-container">
+        <!-- gunakan class berbeda supaya tidak bentrok -->
+        <div class="gradient-overlay"></div>
+        <div class="left-section">
+          <h1>Nikmati film terbaru dengan sekali sentuhan</h1>
+          <p class="description">Pesan tiket bioskop dengan mudah dan cepat. Dapatkan pengalaman menonton yang tak terlupakan tanpa antrian panjang.</p>
+          <div class="button-group"></div>
+        </div>
+        <div class="right-section">
+          <!-- pastikan path gambar benar relatif ke file html / server -->
+          <img src="/images/pict.jpg" alt="Hero image" />
+        </div>
+      </section>
+      <!-- FILM LIST (tetap pakai class film-wrapper dari CSS kamu) -->
+      <section class="film-wrapper" id="filmList">
+        <!-- Film-card dari JS -->
+      </section>
+    </main>
+  </body>
+</html>

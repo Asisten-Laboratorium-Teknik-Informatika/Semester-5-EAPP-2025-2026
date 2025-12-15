@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tiket Saya - PoMovii</title>
+    <script type="text/javascript" src="/eel.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="tikets.html">Tikets</a></li>
+          <li><a href="login.html">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="ticketContainer">
+      <h2>Tiket Berhasil Dibooking!</h2>
+
+      <p><strong>Kode Booking:</strong> <span id="bookingCode"></span></p>
+      <p><strong>Judul Film:</strong> <span id="judulFilm"></span></p>
+      <p><strong>Hari:</strong> <span id="hariTayang"></span></p>
+      <p><strong>Jam:</strong> <span id="jamTayang"></span></p>
+      <p><strong>Kursi:</strong> <span id="kursi"></span></p>
+      <p><strong>Total Harga:</strong> <span id="totalHarga"></span></p>
+    </div>
+    <div id="ticketDetails">
+      <div style="margin-top: 10px">
+        <a id="downloadLink" href="#" download class="btn btn-primary" style="display: none; padding: 9px 100px; background-color: #007bff; color: white; text-decoration: none; border-radius: 2px"> ⬇️ Download Tiket PDF </a>
+      </div>
+    </div>
+
+    <script src="js/tiket.js"></script>
+  </body>
+</html>

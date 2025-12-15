@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pemilihan Jadwal - PoMovi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="booking-page">
+    <div class="movie-booking">
+      <!-- HEADER -->
+      <header class="header">
+        <div class="header-container">
+          <nav class="navbar">
+            <ul>
+              <li><a href="home.html">Home</a></li>
+              <li><a href="booking.html">Booking</a></li>
+              <li><a href="tikets.html">Tikets</a></li>
+              <li><a href="login.html">Logout</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <div class="content-grid">
+          <!-- POSTER SECTION (kiri) -->
+          <section class="poster-section">
+            <div class="poster-image">
+              <!-- Image poster film (fix src path & extension) -->
+              <img id="posterImage" src="" class="poster-img" alt="Poster Film" />
+            </div>
+          </section>
+          <!-- INFO SECTION (kanan) - PERBAIKAN: Pindah KE DALAM content-grid biar grid work -->
+          <section class="info-section">
+            <div class="movie-info">
+              <h1 class="movie-title" id="movieTitle">Judul Film</h1>
+
+              <div class="genre-duration">
+                <span id="genreLabel" class="genre-label">Genre</span>
+                •
+                <span class="duration-label">Durasi</span>
+                :
+                <span id="durationText" class="duration-text">1h 30m</span>
+              </div>
+
+              <div class="meta-info" id="metaInfo"><span>2025</span> | <span>R13</span> | <span>IND</span></div>
+            </div>
+            <!-- SCHEDULE SECTION -->
+            <div class="schedule-section">
+              <h2 class="schedule-title">Jadwal</h2>
+              <!-- DATE SELECTOR (Dynamic) -->
+              <div class="date-selector" id="dateContainer">
+                <!-- tombol tanggal akan dimunculkan via JS -->
+              </div>
+
+              <!-- TIME CONTAINER -->
+              <div class="time-container">
+                <div class="price-display">
+                  <div class="price-label">RP 42,000</div>
+                </div>
+                <!-- TIME SELECTOR -->
+                <div class="time-selector" id="timeContainer">
+                  <!-- tombol jam akan dimunculkan via JS -->
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- BUTTON CONTAINER (di luar grid, di bawah) -->
+        <div class="button-container">
+          <button class="continue-button">Lanjut</button>
+        </div>
+      </main>
+      <!-- <<< PERBAIKAN: Tutup <main> di sini, ga ada extra div -->
+    </div>
+    <!-- Tutup .movie-booking -->
+    <script src="/eel.js"></script>
+    <script src="js/booking.js"></script>
+  </body>
+</html>
